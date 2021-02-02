@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=funkcitrovilo
+Exec=funkcitrovilo
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

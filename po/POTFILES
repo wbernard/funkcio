@@ -1,0 +1,7 @@
+data/im.bernard.funkcitrovilo.desktop.in
+data/im.bernard.funkcitrovilo.appdata.xml.in
+data/im.bernard.funkcitrovilo.gschema.xml
+src/window.ui
+src/main.py
+src/window.py
+
