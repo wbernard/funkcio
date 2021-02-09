@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-    <template class="Main_Window" parent="GtkWindow">
+  <template class="Main_Window" parent="GtkWindow">
     <property name="height-request">320</property>
     <property name="can-focus">False</property>
     <property name="default-height">500</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
@@ -40,7 +41,7 @@ und wähle dann die gewünschte Funktion!</property>
             <property name="can-focus">False</property>
             <property name="layout-style">start</property>
             <child>
-              <object class="GtkButton" id ="gerade">
+              <object class="GtkButton" id="gerade">
                 <property name="label" translatable="yes">Gerade</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -54,7 +55,7 @@ und wähle dann die gewünschte Funktion!</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id = "parabel">
+              <object class="GtkButton" id="parabel">
                 <property name="label" translatable="yes">Parabel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -68,7 +69,7 @@ und wähle dann die gewünschte Funktion!</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id = "kurve3o">
+              <object class="GtkButton" id="kurve3o">
                 <property name="label" translatable="yes">Kurve 3.Ord.</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -82,7 +83,7 @@ und wähle dann die gewünschte Funktion!</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id = "kurve4o">
+              <object class="GtkButton" id="kurve4o">
                 <property name="label" translatable="yes">Kurve 4.Ord.</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -96,7 +97,7 @@ und wähle dann die gewünschte Funktion!</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id = "neustart">
+              <object class="GtkButton" id="neustart">
                 <property name="label" translatable="yes">Neustart</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -136,9 +137,7 @@ und wähle dann die gewünschte Funktion!</property>
             <property name="visible">True</property>
             <property name="app-paintable">True</property>
             <property name="can-focus">False</property>
-            <signal name="button-press-event" handler="onButtonPress" swapped="no"/>
-            <signal name="button-press-event" handler="onMotion" swapped="no"/>
-            <signal name="button-release-event" handler="onButtonRelease" swapped="no"/>
+            <signal name="button-press-event" handler="holePunkt" swapped="no"/>
             <signal name="configure-event" handler="onConfigure" swapped="no"/>
             <signal name="draw" handler="onDraw" swapped="no"/>
           </object>
@@ -148,10 +147,21 @@ und wähle dann die gewünschte Funktion!</property>
             <property name="position">3</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkLabel" id="textAusgabe">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
       </object>
     </child>
   </template>
-    <object class="GtkPopover" id="messageWidget">
+  <object class="GtkPopover" id="messageWidget">
     <property name="width-request">320</property>
     <property name="can-focus">False</property>
     <property name="relative-to">separator1</property>
@@ -167,4 +177,4 @@ und wähle dann die gewünschte Funktion!</property>
       </object>
     </child>
   </object>
-  </interface>
+</interface>
