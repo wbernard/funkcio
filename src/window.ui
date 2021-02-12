@@ -97,12 +97,12 @@ und wähle dann die gewünschte Funktion!</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="neustart">
-                <property name="label" translatable="yes">Neustart</property>
+              <object class="GtkButton" id="parabelHor">
+                <property name="label" translatable="yes">Parabel hor</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <signal name="clicked" handler="novStart" swapped="no"/>
+                <signal name="clicked" handler="zeichneParabelHor" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -111,13 +111,12 @@ und wähle dann die gewünschte Funktion!</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
-                <property name="label">gtk-save</property>
+              <object class="GtkButton" id="neustart">
+                <property name="label" translatable="yes">Neustart</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="use-stock">True</property>
-                <signal name="clicked" handler="saveImage" swapped="no"/>
+                <signal name="clicked" handler="neuStart" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -148,13 +147,36 @@ und wähle dann die gewünschte Funktion!</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="textAusgabe">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="can-focus">False</property>
+            <child>
+              <object class="GtkLabel" id="textAusgabe">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="textAusgabe1">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack-type">end</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
             <property name="position">4</property>
           </packing>
         </child>
