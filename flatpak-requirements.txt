@@ -1,10 +1,1 @@
 numpy == 1.18.4
-pybind11
-matplotlib
-ipython
-pandas
-sympy
-nose
-scipy
-sklearn
-

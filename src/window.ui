@@ -26,7 +26,7 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Klicke mit der linken Maustaste maximal fünf Punkte an
+            <property name="label" translatable="yes">Klicke eine belibige Anzahl Punkte an
 und wähle dann die gewünschte Funktion!</property>
           </object>
           <packing>

@@ -21,11 +21,9 @@ import cairo
 import math
 import os, threading, time, datetime
 import numpy as np
-from sklearn.linear_model import LinearRegression
 
 # Gtk Imports
 
-import sys
 import gi
 
 gi.require_version('Gtk', '3.0')
@@ -76,9 +74,8 @@ class Main_Window(Gtk.Window):
         self.surface       = None
         self.curWidth      = 0
         self.curHeight     = 0
-        self.brushColorVal = [1.0, 0.0, 0.0, 1.0]
-        self.brushSizeVal  = 4
-        self.abCoords      = [ [0.0, 0.0], [0.0, 0.0] ]
+        self.crColorVal    = [1.0, 0.0, 0.0, 1.0]
+        self.crSizeVal     = 4
         self.punkte        = []
 
         self.success    = "#88cc27"
@@ -101,12 +98,12 @@ class Main_Window(Gtk.Window):
             if aw < sw and ah < sh:
                 return False
 
-            brush = cairo.Context(_surface)
+            cr = cairo.Context(_surface)
 
             # Load former surface to new surface
-            brush.set_source_surface(self.surface, 0.0, 0.0)
-            brush.scale(aw, ah)
-            brush.paint()
+            cr.set_source_surface(self.surface, 0.0, 0.0)
+            cr.scale(aw, ah)
+            cr.paint()
 
             self.curWidth   = aw
             self.curHeight  = ah
@@ -118,42 +115,41 @@ class Main_Window(Gtk.Window):
             self.drawArea.set_size_request(self.curWidth, self.curHeight)
 
         self.surface = _surface
-        self.brush   = cairo.Context(self.surface)
+        self.cr   = cairo.Context(self.surface)
         return False
 
-    def onDraw(self, area, brush):   # area ist das Fenster  brush ist ein context
+    def onDraw(self, area, cr):   # area ist das Fenster  cr ist ein context
         aw = area.get_allocated_width()   # liest die aktuellen Abmessungen des Fensters ein
         ah = area.get_allocated_height()
 
         if self.surface is not None:
-            brush.set_source_surface(self.surface, 0.0, 0.0)
-            brush.paint()
+            cr.set_source_surface(self.surface, 0.0, 0.0)
+            cr.paint()
 
             sw = self.surface.get_width()
             sh = self.surface.get_height()
 
-            print ("aw", aw, ah)
-            print ("sw", sw, sh)
+            #print ("aw", aw, ah)
+            #print ("sw", sw, sh)
             # if we have shrunk keep old surface
             if aw < sw and ah < sh:
                 return False
 
-            print (self.zeichne)
+            #print (self.zeichne)
             if self.zeichne:
-                self.brush.rectangle(0, 0, sw, sh)  # x, y, width, height
-                self.brush.set_operator(0);
-                self.brush.fill()
-                self.brush.set_operator(1)
+                self.cr.rectangle(0, 0, sw, sh)  # x, y, width, height
+                self.cr.set_operator(0);
+                self.cr.fill()
+                self.cr.set_operator(1)
                 self.linio(0, sh/2, sw, sh/2) # zeichnet das Achsenkreuz
                 self.linio(sw/2, 0, sw/2, sh)
 
-
                 print ("Punkte", self.punkte[:])
 
-                for i in self.punkte:
-                    x1 = i[0] + sw/2
-                    y1 = -i[1] +sh/2
-                    print ("Punkt", i, x1, y1)
+                for p in self.punkte:
+                    x1 = p[0] + sw/2
+                    y1 = -p[1] +sh/2
+                    print ("Punkt", p, x1, y1)
                     self.zeichnePunkt([x1,y1])
 
             self.zeichne = False
@@ -167,12 +163,10 @@ class Main_Window(Gtk.Window):
         (x1, y1) = eve.x, eve.y
         x = int(x1-sw/2)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
         y = int(-y1+sh/2)
-        print("(x = " + str(x) + ", y = " + str(y) + ")")
+        text = "(x = " + str(x) + ", y = " + str(y) + ")"
+        #print (text)
 
-        #self.zeigeKoordinaten(self.success, "(x = " + str(x) + ", y = " + str(y) + ")")
-        #self.schreibKoord([x1,y1], eve)
-
-        #self.drawArea.queue_draw()
+        self.textAusgabe.set_text(text)
 
     def holePunkt(self, area, eve):
 
@@ -190,10 +184,10 @@ class Main_Window(Gtk.Window):
     def neuStart(self, eve):
         sw = self.surface.get_width()
         sh = self.surface.get_height()
-        self.brush.rectangle(0, 0, sw, sh)  # x, y, width, height
-        self.brush.set_operator(0);
-        self.brush.fill()
-        self.brush.set_operator(1)
+        self.cr.rectangle(0, 0, sw, sh)  # x, y, width, height
+        self.cr.set_operator(0);
+        self.cr.fill()
+        self.cr.set_operator(1)
         self.linio(0, sh/2, sw, sh/2)
         self.linio(sw/2, 0, sw/2, sh)
 
@@ -202,10 +196,10 @@ class Main_Window(Gtk.Window):
     def novStart(self, widget):
         sw = self.surface.get_width()
         sh = self.surface.get_height()
-        self.brush.rectangle(0, 0, sw, sh)  # x, y, width, height
-        self.brush.set_operator(0);
-        self.brush.fill()
-        self.brush.set_operator(1)
+        self.cr.rectangle(0, 0, sw, sh)  # x, y, width, height
+        self.cr.set_operator(0);
+        self.cr.fill()
+        self.cr.set_operator(1)
         self.linio(0, sh/2, sw, sh/2)
         self.linio(sw/2, 0, sw/2, sh)
 
@@ -213,194 +207,181 @@ class Main_Window(Gtk.Window):
         del self.punkte[:]
 
     def zeichnePunkt(self,x1y1):
-        rgba = self.brushColorVal
-        self.brush.set_source_rgba(rgba[0], rgba[1], rgba[2], rgba[3])
-        self.brush.set_line_width(self.brushSizeVal)
-        self.brush.set_line_cap(1) # Linienende 0 = BUTT, 1 = rund  2 = eckig
+        rgba = self.crColorVal
+        self.cr.set_source_rgba(rgba[0], rgba[1], rgba[2], rgba[3])
+        self.cr.set_line_width(self.crSizeVal)
+        self.cr.set_line_cap(1) # Linienende 0 = BUTT, 1 = rund  2 = eckig
 
-        self.brush.arc(x1y1[0], x1y1[1], 3, 0, 2*math.pi)
-        self.brush.fill()
+        self.cr.arc(x1y1[0], x1y1[1], 3, 0, 2*math.pi)
+        self.cr.fill()
 
-        self.brush.set_source_rgba(0, 0, 0, 1)
-        self.brush.select_font_face("sans-serif", cairo.FONT_SLANT_NORMAL,
+        self.cr.set_source_rgba(0, 0, 0, 1)
+        self.cr.select_font_face("sans-serif", cairo.FONT_SLANT_NORMAL,
                 cairo.FONT_WEIGHT_NORMAL)
-        self.brush.move_to(x1y1[0]+5, x1y1[1])
-        self.brush.set_font_size(12)
+        self.cr.move_to(x1y1[0]+5, x1y1[1])
+        self.cr.set_font_size(12)
         x = int(x1y1[0]-sw/2)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
         y = int(-(x1y1[1]-sh/2))
-        #self.drawArea.queue_draw()
-        self.brush.show_text(str(x) + ", " + str(y))
+        self.cr.show_text(str(x) + ", " + str(y))
 
         #self.drawArea.queue_draw()
 
         if self.zeichne == False:   # wenn es nicht eine Anpassung der Zeichenfläche ist
             self.punkte.append([x, y])
             #print (x, y)
-            print (len(self.punkte))
-            if len(self.punkte) == 5:
-                self.displayMessage(self.success, "Keine weitern Punkte anklicken, Funktion wählen!")
+            #print (len(self.punkte))
+            #if len(self.punkte) == 5:
+                #self.displayMessage(self.success, "Keine weitern Punkte anklicken, Funktion wählen!")
 
-    def zeichneGerade(self, widget):
-        self.drawType = "Gerade"
-        if len(self.punkte) > 5:   # self.punkte sind die eingegeben Punkte der Kurve
-            self.displayMessage(self.success, "Zu viele Punkte angeklickt!")
-            self.neuStart(self)
-        elif len(self.punkte) < 2:
-            self.displayMessage(self.success, "Zu wenig Punkte angeklickt!")
-            self.neuStart(self)
-        elif len(self.punkte) == 2:
-            p1 = self.punkte[0]
-            p2 = self.punkte[1]
+    def berechneZeichne(self, typ):
+        n = len(self.punkte)
+        print (n)
+        xp = []
+        yp = []
 
-            m = (p2[1]-p1[1])/(p2[0]-p1[0])
+        for i in range(n):
+            xp.append(self.punkte[i][0])
+            yp.append(self.punkte[i][1])
+
+        xa = np.array(xp)   # Liste wird in Datenfeld (array) umgewandelt
+        ya = np.array(yp)
+
+        fit = np.polyfit(xp,yp,typ)
+
+        if typ == 1:
+            af = fit[0]
+            bf = fit[1]
+
             x = -sw
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
             while x < sw:
-                y = m*(x-p1[0]) + p1[1]   # Geradengleichnung y = m*x + n
+                y = af*x + bf   # Geradengleichnung y = a*x + b
                 punkt.append((x+ sw/2, -y + sh/2))
                 x += 1
 
-            self.brush.move_to(*punkt[0])
-            for p in punkt[1:]:
-                self.brush.line_to(*p)
+            self.zeichneFunktion(punkt)
 
-            self.brush.set_line_width(2)
-            self.brush.set_source_rgb(0, 0, 0.5)
-            self.brush.stroke()
-
-            self.brush.move_to(sw-150, sh-30)
-            a = round(m,3)
-            bf = -m*p1[0]+p1[1]
+            self.cr.move_to(sw-150, sh-30)
+            a = round(af,3)
             b = round(bf,0)
-            self.brush.show_text("y = " + str(a) + "x + " + str(b))
+            self.cr.show_text("y = " + str(a) + "x + " + str(b))
 
+        elif typ == 2:
+            af = fit[0]
+            bf = fit[1]
+            cf = fit[2]
 
-            self.drawArea.queue_draw()
-        else:
-            pass
+            x = -sw
+            punkt = []      # hier geht es um die einzelnen Punkte der Kurve
+            while x < sw:
+                y = af*x**2 + bf*x + cf   # Gleichung der Parabel
+                punkt.append((x+ sw/2, -y + sh/2))
+                x += 1
+
+            self.zeichneFunktion(punkt)
+
+            self.cr.move_to(sw-250, sh-30)
+            a = round(af,4)
+            b = round(bf,3)
+            c = round(cf,0)
+            self.cr.show_text("y = " + str(a) + "x² + " + str(b)+ "x + " + str(c))
+
+        elif typ == 3:
+            af = fit[0]
+            bf = fit[1]
+            cf = fit[2]
+            df = fit[3]
+
+            x = -sw
+            punkt = []      # hier geht es um die einzelnen Punkte der Kurve
+            while x < sw:
+                y = af*x**3 + bf*x**2 + cf*x + df  # Gleichung der Funkion 3.Ordnung
+                punkt.append((x+ sw/2, -y + sh/2))
+                x += 1
+
+            self.zeichneFunktion(punkt)
+
+            self.cr.move_to(sw-300, sh-30)
+            a = round(af,5)
+            b = round(bf,4)
+            c = round(cf,2)
+            d = round(df,0)
+            self.cr.show_text("y = " + str(a) + "x³ + " + str(b)+ "x² + " + str(c)+ "x +" + str(d))
+
+        elif typ == 4:
+            af = fit[0]
+            bf = fit[1]
+            cf = fit[2]
+            df = fit[3]
+            ef = fit[4]
+
+            x = -sw
+            punkt = []      # hier geht es um die einzelnen Punkte der Kurve
+            while x < sw:
+                y = af*x**4 + bf*x**3 + cf*x**2 + df*x + ef # Gleichung der Funkion 4.Ordnung
+                punkt.append((x+ sw/2, -y + sh/2))
+                x += 1
+
+            self.zeichneFunktion(punkt)
+
+            self.cr.move_to(sw-360, sh-30)
+            a = round(af,7)
+            b = round(bf,6)
+            c = round(cf,4)
+            d = round(df,2)
+            e = round(ef,0)
+            self.cr.show_text("y = " + str(a)+ "x**4 + " +  str(b) + "x³ + " + str(c)+ "x² +" + str(d)+ "x + " + str(e))
+
+        self.drawArea.queue_draw()
+
+    def zeichneFunktion(self,punkt):
+        self.cr.move_to(*punkt[0])
+        for p in punkt[1:]:
+            self.cr.line_to(*p)
+
+        self.cr.set_line_width(2)
+        self.cr.set_source_rgb(0, 0, 0.5)
+        self.cr.stroke()
+
+    def zeichneGerade(self, widget):
+        typ = 1
+        print ("Gerade ", len(self.punkte), "Punkte")
+        if  len(self.punkte) < 2:
+            self.displayMessage(self.success, "Mindestens zwei Punkte!")
+        elif len(self.punkte) >= 2:
+            self.berechneZeichne(typ)
 
     def zeichneParabel(self, widget):
-        self.drawType = "Parabel"
-        print (len(self.punkte))
-        if len(self.punkte) > 5:
-            self.displayMessage(self.success, "Zu viele Punkte angeklickt!")
-            self.neuStart(self)
-        elif len(self.punkte) < 3:
-            self.displayMessage(self.success, "Zu wenig Punkte angeklickt!")
-            self.neuStart(self)
-        elif len(self.punkte) == 3:
-            p1 = self.punkte[0]
-            p2 = self.punkte[1]
-            p3 = self.punkte[2]
-
-            mx = [[(p1[0])**2, p1[0], 1], [(p2[0])**2, p2[0], 1], [(p3[0])**2, p3[0], 1]]
-            my = [p1[1], p2[1], p3[1]]
-            kp = np.linalg.solve(mx, my)  # gibt die Faktoren der Parabelgleichnung aus
-
-            x = -sw
-            punkt = []
-            while x < sw:
-                y = kp[0]*x*x + kp[1]*x + kp[2]
-                punkt.append((x+ sw/2, -y + sh/2))
-                x += 1
-
-            self.brush.move_to(*punkt[0])
-            for p in punkt[1:]:
-                self.brush.line_to(*p)
-            #print ("letzer Punkt", p)
-            self.brush.set_line_width(2)
-            self.brush.set_source_rgb(0, 0, 1)
-            self.brush.stroke()
-
-            self.drawArea.queue_draw()
-        else:
-            pass
+        typ = 2
+        print ("Parabel ", len(self.punkte), "Punkte")
+        if len(self.punkte) < 3:
+            self.displayMessage(self.success, "Mindestens drei Punkte!")
+        elif len(self.punkte) >= 3:
+            self.berechneZeichne(typ)
 
     def zeichneKurve3_O(self, widget):
-        self.drawType = "Kurve 3.Ord."
-        print (len(self.punkte))
-        if len(self.punkte) > 5:
-            self.displayMessage(self.success, "Zu viele Punkte angeklickt!")
-            self.neuStart(self)
-        elif len(self.punkte) < 4:
-            self.displayMessage(self.success, "Zu wenig Punkte angeklickt!")
-            self.neuStart(self)
-        elif len(self.punkte) == 4:
-            p1 = self.punkte[0]
-            p2 = self.punkte[1]
-            p3 = self.punkte[2]
-            p4 = self.punkte[3]
-
-            mx = ([[p1[0]**3, p1[0]**2, p1[0], 1], [p2[0]**3, p2[0]**2, p2[0], 1],
-                    [p3[0]**3, p3[0]**2, p3[0], 1], [p4[0]**3, (p4[0])**2, p4[0], 1]])
-            my = [p1[1], p2[1], p3[1], p4[1]]
-            kp = np.linalg.solve(mx, my)  # gibt die Faktoren der Funktionsgleichung aus
-
-            x = -sw
-            punkt = []
-            while x < sw:
-                y = kp[0]*x**3 + kp[1]*x**2 + kp[2]*x + kp[3]
-                punkt.append((x+ sw/2, -y + sh/2))
-                x += 1
-
-            self.brush.move_to(*punkt[0])
-            for p in punkt[1:]:
-                self.brush.line_to(*p)
-            #print ("letzer Punkt", p)
-            self.brush.set_line_width(2)
-            self.brush.set_source_rgb(0, 0, 1)
-            self.brush.stroke()
-
-            self.drawArea.queue_draw()
-        else:
-            pass
+        typ = 3
+        print ("Kurve 3.Ordnung ", len(self.punkte), "Punkte")
+        if len(self.punkte) < 4:
+            self.displayMessage(self.success, "Mindestens vier Punkte!")
+        elif len(self.punkte) >= 4:
+            self.berechneZeichne(typ)
 
     def zeichneKurve4_O(self, widget):
-        self.drawType = "Kurve 4.Ord."
-        print (len(self.punkte))
-        if len(self.punkte) > 5:
-            self.displayMessage(self.success, "Zu viele Punkte angeklickt!")
-            self.neuStart(self)
-        elif len(self.punkte) < 5:
-            self.displayMessage(self.success, "Zu wenig Punkte angeklickt!")
-            self.neuStart(self)
-        else:
-            p1 = self.punkte[0]
-            p2 = self.punkte[1]
-            p3 = self.punkte[2]
-            p4 = self.punkte[3]
-            p5 = self.punkte[4]
-
-            mx = ([[p1[0]**4, p1[0]**3, p1[0]**2, p1[0], 1], [p2[0]**4, p2[0]**3, p2[0]**2, p2[0], 1],
-                    [p3[0]**4, p3[0]**3, p3[0]**2, p3[0], 1], [p4[0]**4, p4[0]**3, (p4[0])**2, p4[0], 1],
-                    [p5[0]**4, p5[0]**3, (p5[0])**2, p5[0], 1]])
-            my = [p1[1], p2[1], p3[1], p4[1], p5[1]]
-            kp = np.linalg.solve(mx, my)  # gibt die Faktoren der Funktionsgleichung aus
-
-            x = -sw
-            punkt = []
-            while x < sw:
-                y = kp[0]*x**4 + kp[1]*x**3 + kp[2]*x**2 + kp[3]*x + kp[4]
-                punkt.append((x+ sw/2, -y + sh/2))
-                x += 1
-
-            self.brush.move_to(*punkt[0])
-            for p in punkt[1:]:
-                self.brush.line_to(*p)
-            #print ("letzer Punkt", p)
-            self.brush.set_line_width(2)
-            self.brush.set_source_rgb(0, 0, 1)
-            self.brush.stroke()
-
-            self.drawArea.queue_draw()
+        typ = 4
+        print ("Kurve 4.Ordnung ", len(self.punkte), "Punkte")
+        if len(self.punkte) < 5:
+            self.displayMessage(self.success, "Mindestens fünf Punkte!")
+        elif len(self.punkte) >= 5:
+            self.berechneZeichne(typ)
 
     def linio(self, x1, y1, x2, y2):
-        self.brush.move_to(x1, y1)
-        self.brush.line_to(x2, y2)
+        self.cr.move_to(x1, y1)
+        self.cr.line_to(x2, y2)
 
-        self.brush.set_source_rgb(0, 0, 0)
-        self.brush.set_line_width(1.5)
-        self.brush.stroke()
+        self.cr.set_source_rgb(0, 0, 0)
+        self.cr.set_line_width(1.5)
+        self.cr.stroke()
 
     def displayMessage(self, type, text):
         markup = "<span foreground='" + type + "'>" + text + "</span>"
@@ -408,11 +389,6 @@ class Main_Window(Gtk.Window):
         self.messageWidget.popup()
         self.hideMessageTimed()
 
-    def zeigeKoordinaten(self, type, text):
-        markup = "<span foreground='" + type + "'>" + text + "</span>"
-        self.xyAnzeige.set_markup(markup)
-        self.Koordinaten.popup()
-        #self.hideMessageTimed()
 
     @threaded
     def hideMessageTimed(self):
