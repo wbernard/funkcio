@@ -79,6 +79,7 @@ class Main_Window(Gtk.Window):
 
         self.zeichneneu  = True
         self.quadra      = 0
+        self.typ         = 0
         self.surface     = None
         self.aktBreite   = 0
         self.aktHoehe    = 0
@@ -156,6 +157,8 @@ class Main_Window(Gtk.Window):
             if self.zeichneneu and self.quadra != 0:
                 pva = sb/self.quadra
                 pha = sh - sh/self.quadra
+                print ("1pva =", pva, "pha =", pha)
+
                 self.cr.rectangle(0, 0, sb, sh)  # x, y, width, height
                 self.cr.set_operator(0);
                 self.cr.fill()
@@ -168,12 +171,16 @@ class Main_Window(Gtk.Window):
                 for p in self.punkte:
                     x1 = p[0] + pva
                     y1 = -p[1] + pha
+                    print ("pva =", pva, "pha =", pha)
                     print ("Punkt", p, x1, y1)
-                    self.zeichnePunkt([x1,y1])
+                    self.zeichnePunkt(x1, y1, pva, pha)
 
-                #self.berechneZeichne(typ)
+                if self.typ != 0:
+                    #pva = sb/self.quadra      # Position der vertikalen/horizontalen Achse
+                    #pha = sh - sh/self.quadra
+                    self.berechneZeichne(pva, pha)
 
-                self.drawArea.queue_draw()
+                #self.drawArea.queue_draw()
 
                 self.zeichneneu = False
 
@@ -207,7 +214,7 @@ class Main_Window(Gtk.Window):
         y = int(-y1+pha)
         print("(" + str(x) + ", " + str(y) + ")")
 
-        self.zeichnePunkt([x1,y1])
+        self.zeichnePunkt(x1,y1,pva,pha)
 
         self.drawArea.queue_draw()
 
@@ -227,23 +234,26 @@ class Main_Window(Gtk.Window):
 
         del self.punkte[:]
         self.quadra = 0
+        self.typ = 0
 
-    def zeichnePunkt(self,x1y1):
+    def zeichnePunkt(self,x1,y1,pva,pha):
         rgba = self.crFarbe
         self.cr.set_source_rgba(rgba[0], rgba[1], rgba[2], rgba[3])
         self.cr.set_line_width(self.crDicke)
         self.cr.set_line_cap(1) # Linienende 0 = BUTT, 1 = rund  2 = eckig
 
-        self.cr.arc(x1y1[0], x1y1[1], 3, 0, 2*math.pi)
+        self.cr.arc(x1, y1, 3, 0, 2*math.pi)
         self.cr.fill()
 
         self.cr.set_source_rgba(0, 0, 0, 1)
         self.cr.select_font_face("sans-serif", cairo.FONT_SLANT_NORMAL,
                 cairo.FONT_WEIGHT_NORMAL)
-        self.cr.move_to(x1y1[0]+5, x1y1[1])
+        self.cr.move_to(x1+5, y1)
         self.cr.set_font_size(12)
-        x = int(x1y1[0]-pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
-        y = int(-(x1y1[1]-pha))
+        x = int(x1 - pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
+        y = int(-y1 + pha)
+        print ("1 pva pha", pva, pha)
+        print ("ja", x, y)
         self.cr.show_text(str(x) + ", " + str(y))
 
         self.drawArea.queue_draw()
@@ -251,7 +261,7 @@ class Main_Window(Gtk.Window):
         if self.zeichneneu == False:   # wenn es nicht eine Anpassung der Zeichenfläche ist
             self.punkte.append([x, y])
 
-    def berechneZeichne(self, typ):
+    def berechneZeichne(self, pva, pha):
         n = len(self.punkte)
         print (n)
         xp = []
@@ -265,13 +275,13 @@ class Main_Window(Gtk.Window):
         ya = np.array(yp)
 
         # fit gibt die Faktoren der Kurvengleichung aus
-        if typ == 5:
+        if self.typ == 5:
             fit = np.polyfit(ya,xa,2)  # horizonzale Parabel vertauscht x und y Werte
             print (fit)
         else:
-            fit = np.polyfit(xp,yp,typ)
+            fit = np.polyfit(xa,ya, self.typ)
 
-        if typ == 1:
+        if self.typ == 1:
             af = fit[0]
             bf = fit[1]
 
@@ -279,7 +289,7 @@ class Main_Window(Gtk.Window):
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
             while x < sb:
                 y = af*x + bf   # Geradengleichnung y = a*x + b
-                punkt.append((x+ pva, -y + pha/2))
+                punkt.append((x+ pva, -y + pha))
                 x += 1
 
             self.zeichneFunktion(punkt)
@@ -288,7 +298,7 @@ class Main_Window(Gtk.Window):
             b = round(bf,0)
             formel = "y = " + str(a) + "x + " + str(b)
 
-        elif typ == 2:
+        elif self.typ == 2:
             af = fit[0]
             bf = fit[1]
             cf = fit[2]
@@ -308,7 +318,7 @@ class Main_Window(Gtk.Window):
 
             formel = "y = " + str(a) + "x² + " + str(b)+ "x + " + str(c)
 
-        elif typ == 3:
+        elif self.typ == 3:
             af = fit[0]
             bf = fit[1]
             cf = fit[2]
@@ -330,7 +340,7 @@ class Main_Window(Gtk.Window):
 
             formel = "y = " + str(a) + "x³ + " + str(b)+ "x² + " + str(c)+ "x +" + str(d)
 
-        elif typ == 4:
+        elif self.typ == 4:
             af = fit[0]
             bf = fit[1]
             cf = fit[2]
@@ -354,7 +364,7 @@ class Main_Window(Gtk.Window):
 
             formel = "y = " + str(a)+ "x**4 + " +  str(b) + "x³ + " + str(c)+ "x² +" + str(d)+ "x + " + str(e)
 
-        elif typ == 5:
+        elif self.typ == 5:
             af = fit[0]
             bf = fit[1]
             cf = fit[2]
@@ -387,44 +397,44 @@ class Main_Window(Gtk.Window):
         self.cr.stroke()
 
     def zeichneGerade(self, widget):
-        typ = 1
+        self.typ = 1
         print ("Gerade ", len(self.punkte), "Punkte")
         if  len(self.punkte) < 2:
             self.displayMessage(self.success, "Mindestens zwei Punkte!")
         elif len(self.punkte) >= 2:
-            self.berechneZeichne(typ)
+            self.berechneZeichne(pva, pha)
 
     def zeichneParabel(self, widget):
-        typ = 2
+        self.typ = 2
         print ("Parabel ", len(self.punkte), "Punkte")
         if len(self.punkte) < 3:
             self.displayMessage(self.success, "Mindestens drei Punkte!")
         elif len(self.punkte) >= 3:
-            self.berechneZeichne(typ)
+            self.berechneZeichne(pva, pha)
 
     def zeichneKurve3_O(self, widget):
-        typ = 3
+        self.typ = 3
         print ("Kurve 3.Ordnung ", len(self.punkte), "Punkte")
         if len(self.punkte) < 4:
             self.displayMessage(self.success, "Mindestens vier Punkte!")
         elif len(self.punkte) >= 4:
-            self.berechneZeichne(typ)
+            self.berechneZeichne(pva, pha)
 
     def zeichneKurve4_O(self, widget):
-        typ = 4
+        self.typ = 4
         print ("Kurve 4.Ordnung ", len(self.punkte), "Punkte")
         if len(self.punkte) < 5:
             self.displayMessage(self.success, "Mindestens fünf Punkte!")
         elif len(self.punkte) >= 5:
-            self.berechneZeichne(typ)
+            self.berechneZeichne(pva, pha)
 
     def zeichneParabelHor(self, widget):
-        typ = 5
+        self.typ = 5
         print ("Parabel horizontal ", len(self.punkte), "Punkte")
         if len(self.punkte) < 3:
             self.displayMessage(self.success, "Mindestens drei Punkte!")
         elif len(self.punkte) >= 3:
-            self.berechneZeichne(typ)
+            self.berechneZeichne(pva, pha)
 
     def linio(self, x1, y1, x2, y2):
         self.cr.move_to(x1, y1)
