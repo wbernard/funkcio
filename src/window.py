@@ -54,6 +54,8 @@ class Main_Window(Gtk.Window):
     kurve4o       = Gtk.Template.Child()
     parabelHor    = Gtk.Template.Child()
     neustart      = Gtk.Template.Child()
+    einquadrant   = Gtk.Template.Child()
+    vierquadrant  = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -72,20 +74,31 @@ class Main_Window(Gtk.Window):
         self.kurve4o.connect('clicked', self.zeichneKurve4_O)
         self.parabelHor.connect('clicked', self.zeichneParabelHor)
         self.neustart.connect('clicked', self.neuStart)
+        self.einquadrant.connect('clicked', self.einQuadr)
+        self.vierquadrant.connect('clicked', self.vierQuadr)
 
-        self.zeichne       = True
-        self.surface       = None
-        self.aktBreite      = 0
-        self.aktHoehe     = 0
-        self.crFarbe    = [1.0, 0.0, 0.0, 1.0]
+        self.zeichneneu  = True
+        self.quadra      = 0
+        self.surface     = None
+        self.aktBreite   = 0
+        self.aktHoehe    = 0
+        self.crFarbe     = [1.0, 0.0, 0.0, 1.0]
         self.crDicke     = 4
-        self.punkte        = []
+        self.punkte      = []
 
         self.success    = "#88cc27"
         self.warning    = "#ffa800"
         self.error      = "#ff0000"
 
-    def onConfigure(self, area, eve, data = None):
+    def einQuadr(self, widget):
+        self.quadra = 8
+
+
+    def vierQuadr(self, widget):
+        self.quadra = 2
+
+
+    def onConfigure(self, area, eve, data = None): # wird bei Änderung des Fensters aufgerufen
         ab = area.get_allocated_width()   #liest die aktuellen Abmessungen des Fensters ein
         ah = area.get_allocated_height()
 
@@ -111,7 +124,7 @@ class Main_Window(Gtk.Window):
             self.aktBreite   = ab
             self.aktHoehe  = ah
 
-            self.zeichne    = True     # d.h. dass in onDrab die Zeichenfläche neu gezeichnet wird
+            self.zeichneneu    = True     # d.h. dass in onDraw die Zeichenfläche neu gezeichnet wird
 
 
         else:
@@ -121,7 +134,8 @@ class Main_Window(Gtk.Window):
         self.cr   = cairo.Context(self.surface)
         return False
 
-    def onDraw(self, area, cr):   # area ist das Fenster  cr ist ein context
+        # onDraw wird aufgerufen, wenn die Zeichebene neu gerendert wird
+    def onDraw(self, area, cr):    # area ist das Fenster  cr ist ein context
         ab = area.get_allocated_width()   # liest die aktuellen Abmessungen des Fensters ein
         ah = area.get_allocated_height()
 
@@ -138,24 +152,30 @@ class Main_Window(Gtk.Window):
             if ab < sb and ah < sh:
                 return False
 
-            #print (self.zeichne)
-            if self.zeichne:
+
+            if self.zeichneneu and self.quadra != 0:
+                pva = sb/self.quadra
+                pha = sh - sh/self.quadra
                 self.cr.rectangle(0, 0, sb, sh)  # x, y, width, height
                 self.cr.set_operator(0);
                 self.cr.fill()
                 self.cr.set_operator(1)
-                self.linio(0, sh/2, sb, sh/2) # zeichnet das Achsenkreuz
-                self.linio(sb/2, 0, sb/2, sh)
+                self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
+                self.linio(pva, 0, pva, sh)
 
                 print ("Punkte", self.punkte[:])
 
                 for p in self.punkte:
-                    x1 = p[0] + sb/2
-                    y1 = -p[1] +sh/2
+                    x1 = p[0] + pva
+                    y1 = -p[1] + pha
                     print ("Punkt", p, x1, y1)
                     self.zeichnePunkt([x1,y1])
 
-            self.zeichne = False
+                #self.berechneZeichne(typ)
+
+                self.drawArea.queue_draw()
+
+                self.zeichneneu = False
 
         else:
             print ("No surface info...")
@@ -163,21 +183,28 @@ class Main_Window(Gtk.Window):
         return False
 
     def zeigeKoord (self, area, eve):
-        (x1, y1) = eve.x, eve.y
-        x = int(x1-sb/2)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
-        y = int(-y1+sh/2)
-        koord = "  x  " + str(x) + ", y  " + str(y)
-        #print (text)
+        if self.quadra == 0:
+            self.displayMessage(self.warning, "Anzahl der Quadranten wählen!")
+        elif self.quadra == 2 or self.quadra == 8:   # vier oder ein Quadranten
+            (x1, y1) = eve.x, eve.y
+            global pva, pha         # Position der vertikalen/horizontalen Achse
+            pva = sb/self.quadra
+            pha = sh - sh/self.quadra
+            x = int(x1-pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
+            y = int(-y1+pha)
 
-        self.textAusgabe.set_text(koord)
+            koord = "  x  " + str(x) + ", y  " + str(y)
+            self.textAusgabe.set_text(koord)
+        else:
+            self.displayMessage(self.error, "Da ist etwas faul!")
 
     def holePunkt(self, area, eve):
 
         x1 = eve.x
         y1 = eve.y
 
-        x = int(x1-sb/2)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
-        y = int(-y1+sh/2)
+        x = int(x1- pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
+        y = int(-y1+pha)
         print("(" + str(x) + ", " + str(y) + ")")
 
         self.zeichnePunkt([x1,y1])
@@ -185,17 +212,21 @@ class Main_Window(Gtk.Window):
         self.drawArea.queue_draw()
 
     def neuStart(self, widget):
+
         sb = self.surface.get_width()
         sh = self.surface.get_height()
         self.cr.rectangle(0, 0, sb, sh)  # x, y, width, height
         self.cr.set_operator(0);
         self.cr.fill()
+        '''
         self.cr.set_operator(1)
-        self.linio(0, sh/2, sb, sh/2)
-        self.linio(sb/2, 0, sb/2, sh)
-
+        self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
+        self.linio(pva, 0, pva, sh)
+        '''
         self.drawArea.queue_draw()
+
         del self.punkte[:]
+        self.quadra = 0
 
     def zeichnePunkt(self,x1y1):
         rgba = self.crFarbe
@@ -211,13 +242,13 @@ class Main_Window(Gtk.Window):
                 cairo.FONT_WEIGHT_NORMAL)
         self.cr.move_to(x1y1[0]+5, x1y1[1])
         self.cr.set_font_size(12)
-        x = int(x1y1[0]-sb/2)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
-        y = int(-(x1y1[1]-sh/2))
+        x = int(x1y1[0]-pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
+        y = int(-(x1y1[1]-pha))
         self.cr.show_text(str(x) + ", " + str(y))
 
-        #self.drawArea.queue_draw()
+        self.drawArea.queue_draw()
 
-        if self.zeichne == False:   # wenn es nicht eine Anpassung der Zeichenfläche ist
+        if self.zeichneneu == False:   # wenn es nicht eine Anpassung der Zeichenfläche ist
             self.punkte.append([x, y])
 
     def berechneZeichne(self, typ):
@@ -248,7 +279,7 @@ class Main_Window(Gtk.Window):
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
             while x < sb:
                 y = af*x + bf   # Geradengleichnung y = a*x + b
-                punkt.append((x+ sb/2, -y + sh/2))
+                punkt.append((x+ pva, -y + pha/2))
                 x += 1
 
             self.zeichneFunktion(punkt)
@@ -266,7 +297,7 @@ class Main_Window(Gtk.Window):
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
             while x < sb:
                 y = af*x**2 + bf*x + cf   # Gleichung der Parabel
-                punkt.append((x+ sb/2, -y + sh/2))
+                punkt.append((x+ pva, -y + pha))
                 x += 1
 
             self.zeichneFunktion(punkt)
@@ -287,7 +318,7 @@ class Main_Window(Gtk.Window):
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
             while x < sb:
                 y = af*x**3 + bf*x**2 + cf*x + df  # Gleichung der Funkion 3.Ordnung
-                punkt.append((x+ sb/2, -y + sh/2))
+                punkt.append((x+ pva, -y + pha))
                 x += 1
 
             self.zeichneFunktion(punkt)
@@ -310,7 +341,7 @@ class Main_Window(Gtk.Window):
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
             while x < sb:
                 y = af*x**4 + bf*x**3 + cf*x**2 + df*x + ef # Gleichung der Funkion 4.Ordnung
-                punkt.append((x+ sb/2, -y + sh/2))
+                punkt.append((x+ pva, -y + pha))
                 x += 1
 
             self.zeichneFunktion(punkt)
@@ -332,7 +363,7 @@ class Main_Window(Gtk.Window):
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
             while x < sb:
                 y = af*x**2 + bf*x + cf   # Gleichung der Parabel
-                punkt.append((y+ sb/2, -x + sh/2))
+                punkt.append((y+ pva, -x + pha))
                 x += 1
 
             self.zeichneFunktion(punkt)

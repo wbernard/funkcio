@@ -27,8 +27,8 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
-              <object class="GtkButton" id="einquadrant">
-                <property name="label" translatable="yes">ein Quadrant</property>
+              <object class="GtkButton" id="quadranten">
+                <property name="label" translatable="yes">ein/vier Quadranten</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -40,29 +40,15 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="vierquadrant">
-                <property name="label" translatable="yes">vier Quadranten</property>
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">  Wähle ob ein oder vier Quadranten. Klicke denn eine belibige Anzahl Punkte an und wähle dann die gewünschte Funktion!</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">      Wähle ob ein oder vier Quadranten. Klicke dann eine beliebige
-     Anzahl Punkte an und wähle dann die gewünschte Funktion!</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
               </packing>
             </child>
           </object>
