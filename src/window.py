@@ -74,9 +74,11 @@ class Main_Window(Gtk.Window):
         self.kurve4o.connect('clicked', self.zeichneKurve4_O)
         self.parabelHor.connect('clicked', self.zeichneParabelHor)
         self.neustart.connect('clicked', self.neuStart)
+        #self.neustart.connect('clicked', self.onDraw)
         self.einquadrant.connect('clicked', self.einQuadr)
         self.vierquadrant.connect('clicked', self.vierQuadr)
 
+        self.linfarb     = [[0,0,0.5], [0.5,0,0.5],[0,0.5,0.5], [0.5,0,0], [0.5,0.5,0]]
         self.zeichneneu  = True
         self.quadra      = 0
         self.typ         = 0
@@ -206,7 +208,6 @@ class Main_Window(Gtk.Window):
             self.displayMessage(self.error, "Da ist etwas faul!")
 
     def holePunkt(self, area, eve):
-
         x1 = eve.x
         y1 = eve.y
 
@@ -225,11 +226,11 @@ class Main_Window(Gtk.Window):
         self.cr.rectangle(0, 0, sb, sh)  # x, y, width, height
         self.cr.set_operator(0);
         self.cr.fill()
-        '''
+
         self.cr.set_operator(1)
         self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
         self.linio(pva, 0, pva, sh)
-        '''
+
         self.drawArea.queue_draw()
 
         del self.punkte[:]
@@ -393,7 +394,9 @@ class Main_Window(Gtk.Window):
             self.cr.line_to(*p)
 
         self.cr.set_line_width(2)
-        self.cr.set_source_rgb(0, 0, 0.5)
+        i = self.typ-1
+        f =self.linfarb
+        self.cr.set_source_rgb(f[i][0],f[i][1],f[i][2])
         self.cr.stroke()
 
     def zeichneGerade(self, widget):
