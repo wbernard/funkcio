@@ -236,6 +236,7 @@ class Main_Window(Gtk.Window):
         self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
         self.linio(pva, 0, pva, sh)
 
+        self.textAusgabe1.set_text("")
         #self.drawArea.queue_draw()
 
         del self.punkte[:]
@@ -305,7 +306,7 @@ class Main_Window(Gtk.Window):
 
             a = round(af,3)
             b = round(bf,0)
-            formel = "y = " + str(a) + "x + " + str(b)
+            formel = "y = " + "{:+}".format(a) + "x " + "{:+}".format(b)
 
         elif self.typ == 2:
             af = fit[0]
@@ -325,7 +326,7 @@ class Main_Window(Gtk.Window):
             b = round(bf,3)
             c = round(cf,0)
 
-            formel = "y = " + str(a) + "x² + " + str(b)+ "x + " + str(c)
+            formel = "y = " + "{:+}".format(a) + "x²  " + "{:+}".format(b)+ "x  " + "{:+}".format(c)
 
         elif self.typ == 3:
             af = fit[0]
@@ -347,7 +348,7 @@ class Main_Window(Gtk.Window):
             c = round(cf,2)
             d = round(df,0)
 
-            formel = "y = " + str(a) + "x³ + " + str(b)+ "x² + " + str(c)+ "x +" + str(d)
+            formel = "y = " + "{:+}".format(a) + "x³ " + "{:+}".format(b)+ "x² " + "{:+}".format(c)+ "x " + "{:+}".format(d)
 
         elif self.typ == 4:
             af = fit[0]
@@ -371,7 +372,7 @@ class Main_Window(Gtk.Window):
             d = round(df,2)
             e = round(ef,0)
 
-            formel = "y = " + str(a)+ "x**4 + " +  str(b) + "x³ + " + str(c)+ "x² +" + str(d)+ "x + " + str(e)
+            formel = "y = " + "{:+}".format(a)+ "x**4 " +  "{:+}".format(b)+ "x³ " + "{:+}".format(c)+ "x² " + "{:+}".format(d)+ "x " + "{:+}".format(e)
 
         elif self.typ == 5:
             af = fit[0]
@@ -391,7 +392,7 @@ class Main_Window(Gtk.Window):
             b = round(bf,3)
             c = round(cf,0)
 
-            formel = "x = " + str(a) + "y² + " + str(b)+ "y + " + str(c)
+            formel = "x = " + "{:+}".format(a) + "y² " + "{:+}".format(b)+ "y " + "{:+}".format(c)
 
         elif self.typ == 6:
             af = fit[0]
@@ -413,7 +414,7 @@ class Main_Window(Gtk.Window):
             c = round(cf,2)
             d = round(df,0)
 
-            formel = "x = " + str(a) + "y³ + " + str(b)+ "y² + " + str(c)+ "y +" + str(d)
+            formel = "x = " + "{:+}".format(a) + "y³ " + "{:+}".format(b)+ "y² " + "{:+}".format(c)+ "y " + "{:+}".format(d)
 
         self.textAusgabe1.set_text(formel)
         self.drawArea.queue_draw()
