@@ -53,9 +53,10 @@ class Main_Window(Gtk.Window):
     kurve3o       = Gtk.Template.Child()
     kurve4o       = Gtk.Template.Child()
     parabelHor    = Gtk.Template.Child()
+    kurve3hor     = Gtk.Template.Child()
     neustart      = Gtk.Template.Child()
-    einquadrant   = Gtk.Template.Child()
-    vierquadrant  = Gtk.Template.Child()
+    quadranten    = Gtk.Template.Child()
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -73,14 +74,15 @@ class Main_Window(Gtk.Window):
         self.kurve3o.connect('clicked', self.zeichneKurve3_O)
         self.kurve4o.connect('clicked', self.zeichneKurve4_O)
         self.parabelHor.connect('clicked', self.zeichneParabelHor)
+        self.kurve3hor.connect('clicked', self.zeichneKurve3_OHor)
         self.neustart.connect('clicked', self.neuStart)
-        #self.neustart.connect('clicked', self.onDraw)
-        self.einquadrant.connect('clicked', self.einQuadr)
-        self.vierquadrant.connect('clicked', self.vierQuadr)
+        self.quadranten.connect('clicked', self.einVierQuad)
 
-        self.linfarb     = [[0,0,0.5], [0.5,0,0.5],[0,0.5,0.5], [0.5,0,0], [0.5,0.5,0]]
+
+
+        self.linfarb     = [[0,0,0.5], [0.5,0,0.5],[0,0.5,0.5], [0.5,0,0], [0.5,0.5,0], [0,1,0] ]
         self.zeichneneu  = True
-        self.quadra      = 0
+        self.quadra      = 8
         self.typ         = 0
         self.surface     = None
         self.aktBreite   = 0
@@ -93,13 +95,18 @@ class Main_Window(Gtk.Window):
         self.warning    = "#ffa800"
         self.error      = "#ff0000"
 
-    def einQuadr(self, widget):
-        self.quadra = 8
+    def einVierQuad(self, widget):
+        if self.quadra == 2:
+            self.quadra = 8
+        elif self.quadra == 8:
+            self.quadra = 2
+        else:
+            print ("self.quadra muss 2 oder 8 sein!")
 
+        print ("quadranten", self.quadra)
 
-    def vierQuadr(self, widget):
-        self.quadra = 2
-
+        self.zeichneneu    = True
+        self.onDraw(self)
 
     def onConfigure(self, area, eve, data = None): # wird bei Änderung des Fensters aufgerufen
         ab = area.get_allocated_width()   #liest die aktuellen Abmessungen des Fensters ein
@@ -192,9 +199,7 @@ class Main_Window(Gtk.Window):
         return False
 
     def zeigeKoord (self, area, eve):
-        if self.quadra == 0:
-            self.displayMessage(self.warning, "Anzahl der Quadranten wählen!")
-        elif self.quadra == 2 or self.quadra == 8:   # vier oder ein Quadranten
+        if self.quadra == 2 or self.quadra == 8:   # vier oder ein Quadranten
             (x1, y1) = eve.x, eve.y
             global pva, pha         # Position der vertikalen/horizontalen Achse
             pva = sb/self.quadra
@@ -231,10 +236,10 @@ class Main_Window(Gtk.Window):
         self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
         self.linio(pva, 0, pva, sh)
 
-        self.drawArea.queue_draw()
+        #self.drawArea.queue_draw()
 
         del self.punkte[:]
-        self.quadra = 0
+        #self.quadra = 8
         self.typ = 0
 
     def zeichnePunkt(self,x1,y1,pva,pha):
@@ -278,7 +283,10 @@ class Main_Window(Gtk.Window):
         # fit gibt die Faktoren der Kurvengleichung aus
         if self.typ == 5:
             fit = np.polyfit(ya,xa,2)  # horizonzale Parabel vertauscht x und y Werte
-            print (fit)
+            #print (fit)
+        elif self.typ == 6:
+            fit = np.polyfit(ya,xa,3)  # horizonzale Kurve vertauscht x und y Werte
+            #print (fit)
         else:
             fit = np.polyfit(xa,ya, self.typ)
 
@@ -373,7 +381,7 @@ class Main_Window(Gtk.Window):
             x = -sb
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
             while x < sb:
-                y = af*x**2 + bf*x + cf   # Gleichung der Parabel
+                y = af*x**2 + bf*x + cf   # Gleichung der horizontalen Parabel
                 punkt.append((y+ pva, -x + pha))
                 x += 1
 
@@ -384,6 +392,28 @@ class Main_Window(Gtk.Window):
             c = round(cf,0)
 
             formel = "x = " + str(a) + "y² + " + str(b)+ "y + " + str(c)
+
+        elif self.typ == 6:
+            af = fit[0]
+            bf = fit[1]
+            cf = fit[2]
+            df = fit[3]
+
+            x = -sb
+            punkt = []      # hier geht es um die einzelnen Punkte der Kurve
+            while x < sb:
+                y = af*x**3 + bf*x**2 + cf*x + df  # Gleichung der Funkion 3.Ordnung
+                punkt.append((y+ pva, -x + pha))
+                x += 1
+
+            self.zeichneFunktion(punkt)
+
+            a = round(af,5)
+            b = round(bf,4)
+            c = round(cf,2)
+            d = round(df,0)
+
+            formel = "x = " + str(a) + "y³ + " + str(b)+ "y² + " + str(c)+ "y +" + str(d)
 
         self.textAusgabe1.set_text(formel)
         self.drawArea.queue_draw()
@@ -437,6 +467,14 @@ class Main_Window(Gtk.Window):
         if len(self.punkte) < 3:
             self.displayMessage(self.success, "Mindestens drei Punkte!")
         elif len(self.punkte) >= 3:
+            self.berechneZeichne(pva, pha)
+
+    def zeichneKurve3_OHor(self, widget):
+        self.typ = 6
+        print ("Kurve 3.Ord.horizontal ", len(self.punkte), "Punkte")
+        if len(self.punkte) < 4:
+            self.displayMessage(self.success, "Mindestens vier Punkte!")
+        elif len(self.punkte) >= 4:
             self.berechneZeichne(pva, pha)
 
     def linio(self, x1, y1, x2, y2):

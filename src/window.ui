@@ -27,8 +27,8 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
-              <object class="GtkButton" id="einquadrant">
-                <property name="label" translatable="yes">ein Quadrant</property>
+              <object class="GtkButton" id="quadranten">
+                <property name="label" translatable="yes">ein/vier Quadranten</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -40,19 +40,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="vierquadrant">
-                <property name="label" translatable="yes">vier Quadranten</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -61,6 +48,21 @@
               </object>
               <packing>
                 <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="neustart">
+                <property name="label" translatable="yes">Neustart</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="clicked" handler="neuStart" swapped="no"/>
+                <signal name="configure-event" handler="onConfigure" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
@@ -148,17 +150,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="neustart">
-                <property name="label" translatable="yes">Neustart</property>
+              <object class="GtkButton" id="kurve3hor">
+                <property name="label" translatable="yes">Kurve 3.O hor</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <signal name="clicked" handler="neuStart" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">6</property>
+                <property name="position">5</property>
               </packing>
             </child>
           </object>
