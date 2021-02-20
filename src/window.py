@@ -40,7 +40,7 @@ def threaded(fn):
     return wrapper
 
 @Gtk.Template(resource_path='/im/bernard/funkcitrovilo/window.ui')
-class Main_Window(Gtk.Window):
+class Main_Window(Gtk.ApplicationWindow):
     __gtype_name__ = 'Main_Window'
 
     drawArea      = Gtk.Template.Child()
@@ -79,7 +79,6 @@ class Main_Window(Gtk.Window):
         self.quadranten.connect('clicked', self.einVierQuad)
 
 
-
         self.linfarb     = [[0,0,0.5], [0.5,0,0.5],[0,0.5,0.5], [0.5,0,0], [0.5,0.5,0], [0,1,0] ]
         self.zeichneneu  = True
         self.quadra      = 8
@@ -106,7 +105,10 @@ class Main_Window(Gtk.Window):
         print ("quadranten", self.quadra)
 
         self.zeichneneu    = True
-        self.onDraw(self)
+        self.onDraw(self.drawArea, self.cr)
+        #self.zeichneAchsen()
+        self.drawArea.queue_draw()
+
 
     def onConfigure(self, area, eve, data = None): # wird bei Änderung des Fensters aufgerufen
         ab = area.get_allocated_width()   #liest die aktuellen Abmessungen des Fensters ein
@@ -116,7 +118,7 @@ class Main_Window(Gtk.Window):
 
         # if surface and area updated create new surface
         if self.surface is not None:
-            global sb, sh
+            #global sb, sh
             sb = self.surface.get_width()
             sh = self.surface.get_height()
 
@@ -152,7 +154,7 @@ class Main_Window(Gtk.Window):
         if self.surface is not None:
             cr.set_source_surface(self.surface, 0.0, 0.0)
             cr.paint()
-
+            global sb, sh
             sb = self.surface.get_width()
             sh = self.surface.get_height()
 
@@ -164,6 +166,7 @@ class Main_Window(Gtk.Window):
 
 
             if self.zeichneneu and self.quadra != 0:
+                global pva, pha
                 pva = sb/self.quadra
                 pha = sh - sh/self.quadra
                 print ("1pva =", pva, "pha =", pha)
@@ -171,11 +174,14 @@ class Main_Window(Gtk.Window):
                 self.cr.rectangle(0, 0, sb, sh)  # x, y, width, height
                 self.cr.set_operator(0);
                 self.cr.fill()
-                self.cr.set_operator(1)
-                self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
-                self.linio(pva, 0, pva, sh)
 
-                print ("Punkte", self.punkte[:])
+                self.zeichneAchsen(pva, pha)
+
+                '''self.cr.set_operator(1)
+                self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
+                self.linio(pva, 0, pva, sh)'''
+
+                #print ("Punkte", self.punkte[:])
 
                 for p in self.punkte:
                     x1 = p[0] + pva
@@ -201,7 +207,7 @@ class Main_Window(Gtk.Window):
     def zeigeKoord (self, area, eve):
         if self.quadra == 2 or self.quadra == 8:   # vier oder ein Quadranten
             (x1, y1) = eve.x, eve.y
-            global pva, pha         # Position der vertikalen/horizontalen Achse
+            #global pva, pha         # Position der vertikalen/horizontalen Achse
             pva = sb/self.quadra
             pha = sh - sh/self.quadra
             x = int(x1-pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
@@ -224,6 +230,11 @@ class Main_Window(Gtk.Window):
 
         self.drawArea.queue_draw()
 
+    def zeichneAchsen(self, pva, pha):
+        self.cr.set_operator(1)
+        self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
+        self.linio(pva, 0, pva, sh)
+
     def neuStart(self, widget):
 
         sb = self.surface.get_width()
@@ -232,16 +243,18 @@ class Main_Window(Gtk.Window):
         self.cr.set_operator(0);
         self.cr.fill()
 
-        self.cr.set_operator(1)
+        self.zeichneAchsen(pva, pha)
+        '''self.cr.set_operator(1)
         self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
-        self.linio(pva, 0, pva, sh)
+        self.linio(pva, 0, pva, sh)'''
 
         self.textAusgabe1.set_text("")
-        #self.drawArea.queue_draw()
+        self.drawArea.queue_draw()
 
         del self.punkte[:]
         #self.quadra = 8
         self.typ = 0
+
 
     def zeichnePunkt(self,x1,y1,pva,pha):
         rgba = self.crFarbe
@@ -259,16 +272,17 @@ class Main_Window(Gtk.Window):
         self.cr.set_font_size(12)
         x = int(x1 - pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
         y = int(-y1 + pha)
-        print ("1 pva pha", pva, pha)
+        print ("2 pva pha", pva, pha)
         print ("ja", x, y)
         self.cr.show_text(str(x) + ", " + str(y))
 
-        self.drawArea.queue_draw()
+        #self.drawArea.queue_draw()
 
         if self.zeichneneu == False:   # wenn es nicht eine Anpassung der Zeichenfläche ist
             self.punkte.append([x, y])
 
     def berechneZeichne(self, pva, pha):
+
         n = len(self.punkte)
         print (n)
         xp = []
@@ -420,6 +434,7 @@ class Main_Window(Gtk.Window):
         self.drawArea.queue_draw()
 
     def zeichneFunktion(self,punkt):
+
         self.cr.move_to(*punkt[0])
         for p in punkt[1:]:
             self.cr.line_to(*p)
@@ -440,11 +455,12 @@ class Main_Window(Gtk.Window):
 
     def zeichneParabel(self, widget):
         self.typ = 2
-        print ("Parabel ", len(self.punkte), "Punkte")
+        print ("Parabel ", len(self.punkte), "Punkte Quadranten", pva, pha)
         if len(self.punkte) < 3:
             self.displayMessage(self.success, "Mindestens drei Punkte!")
         elif len(self.punkte) >= 3:
             self.berechneZeichne(pva, pha)
+
 
     def zeichneKurve3_O(self, widget):
         self.typ = 3
