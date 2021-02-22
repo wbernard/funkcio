@@ -40,6 +40,7 @@ def threaded(fn):
     return wrapper
 
 @Gtk.Template(resource_path='/im/bernard/funkcitrovilo/window.ui')
+
 class Main_Window(Gtk.ApplicationWindow):
     __gtype_name__ = 'Main_Window'
 
@@ -51,18 +52,17 @@ class Main_Window(Gtk.ApplicationWindow):
     gerade        = Gtk.Template.Child()
     parabel       = Gtk.Template.Child()
     kurve3o       = Gtk.Template.Child()
-    kurve4o       = Gtk.Template.Child()
     parabelHor    = Gtk.Template.Child()
     kurve3hor     = Gtk.Template.Child()
     neustart      = Gtk.Template.Child()
-    quadranten    = Gtk.Template.Child()
+    quadranten1   = Gtk.Template.Child()
+    quadranten2   = Gtk.Template.Child()
+    menuKnopf     = Gtk.Template.Child()
 
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-
-        #self.drawArea.add_events (Gdk.EventMask.BUTTON_PRESS_MASK)
         self.drawArea.set_events(Gdk.EventMask.ALL_EVENTS_MASK)
 
         self.drawArea.connect('draw', self.onDraw)
@@ -72,12 +72,11 @@ class Main_Window(Gtk.ApplicationWindow):
         self.gerade.connect('clicked', self.zeichneGerade)
         self.parabel.connect('clicked', self.zeichneParabel)
         self.kurve3o.connect('clicked', self.zeichneKurve3_O)
-        self.kurve4o.connect('clicked', self.zeichneKurve4_O)
         self.parabelHor.connect('clicked', self.zeichneParabelHor)
         self.kurve3hor.connect('clicked', self.zeichneKurve3_OHor)
         self.neustart.connect('clicked', self.neuStart)
-        self.quadranten.connect('clicked', self.einVierQuad)
-
+        self.quadranten1.connect('clicked', self.einVierQuad, "1")
+        self.quadranten2.connect('clicked', self.einVierQuad, "2")
 
         self.linfarb     = [[0,0,0.5], [0.5,0,0.5],[0,0.5,0.5], [0.5,0,0], [0.5,0.5,0], [0,1,0] ]
         self.zeichneneu  = True
@@ -90,24 +89,42 @@ class Main_Window(Gtk.ApplicationWindow):
         self.crDicke     = 4
         self.punkte      = []
 
+        self.quadranten1.set_active(True)
+        self.quadranten2.set_active(False)
+
         self.success    = "#88cc27"
         self.warning    = "#ffa800"
         self.error      = "#ff0000"
 
-    def einVierQuad(self, widget):
-        if self.quadra == 2:
+    def einVierQuad(self, widget, name):
+        if name == "1":
             self.quadra = 8
-        elif self.quadra == 8:
+            print ("Hallo 1")
+            self.zeichneneu    = True
+            self.onDraw(self.drawArea, self.cr)
+            self.drawArea.queue_draw()
+
+        elif name == "2":
             self.quadra = 2
+            print ("Hallo 2")
+            self.zeichneneu    = True
+            self.onDraw(self.drawArea, self.cr)
+            self.drawArea.queue_draw()
+
         else:
-            print ("self.quadra muss 2 oder 8 sein!")
+            print ("Da stimmt etwas nicht!")
 
-        print ("quadranten", self.quadra)
-
-        self.zeichneneu    = True
-        self.onDraw(self.drawArea, self.cr)
-        #self.zeichneAchsen()
-        self.drawArea.queue_draw()
+    def vierEinQuad(self, widget):
+        if self.quadranten2.get_active() and not self.quadranten1.get_active():
+            pass
+        else:
+            self.quadranten2.set_active(True)
+            self.quadranten1.set_active(False)
+            if self.quadra != 2:
+                self.quadra = 2
+            self.zeichneneu    = True
+            self.onDraw(self.drawArea, self.cr)
+            self.drawArea.queue_draw()
 
 
     def onConfigure(self, area, eve, data = None): # wird bei Änderung des Fensters aufgerufen
@@ -116,19 +133,19 @@ class Main_Window(Gtk.ApplicationWindow):
 
         _surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, ab, ah)
 
-        # if surface and area updated create new surface
+        # wenn das fenster verändert wird wird eine neue Zeichenebene erstellt
         if self.surface is not None:
             #global sb, sh
             sb = self.surface.get_width()
             sh = self.surface.get_height()
 
-            # if we have shrunk keep old surface
+            # bei Verkleinerung bleibt die alte Ebene
             if ab < sb and ah < sh:
                 return False
 
             cr = cairo.Context(_surface)
 
-            # Load former surface to new surface
+            # die alte ebene wird in die neue geladen
             cr.set_source_surface(self.surface, 0.0, 0.0)
             cr.scale(ab, ah)
             cr.paint()
@@ -160,7 +177,7 @@ class Main_Window(Gtk.ApplicationWindow):
 
             #print ("ab", ab, ah)
             #print ("sb", sb, sh)
-            # if we have shrunk keep old surface
+            # bei Verkleinerung bleibt die alte Ebene
             if ab < sb and ah < sh:
                 return False
 
@@ -176,10 +193,6 @@ class Main_Window(Gtk.ApplicationWindow):
                 self.cr.fill()
 
                 self.zeichneAchsen(pva, pha)
-
-                '''self.cr.set_operator(1)
-                self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
-                self.linio(pva, 0, pva, sh)'''
 
                 #print ("Punkte", self.punkte[:])
 
@@ -200,9 +213,10 @@ class Main_Window(Gtk.ApplicationWindow):
                 self.zeichneneu = False
 
         else:
-            print ("No surface info...")
+            print ("keine Zeichenebene !!")
 
         return False
+
 
     def zeigeKoord (self, area, eve):
         if self.quadra == 2 or self.quadra == 8:   # vier oder ein Quadranten
@@ -336,8 +350,8 @@ class Main_Window(Gtk.ApplicationWindow):
 
             self.zeichneFunktion(punkt)
 
-            a = round(af,4)
-            b = round(bf,3)
+            a = round(af,5)
+            b = round(bf,4)
             c = round(cf,0)
 
             formel = "y = " + "{:+}".format(a) + "x²  " + "{:+}".format(b)+ "x  " + "{:+}".format(c)
@@ -357,36 +371,12 @@ class Main_Window(Gtk.ApplicationWindow):
 
             self.zeichneFunktion(punkt)
 
-            a = round(af,5)
+            a = round(af,6)
             b = round(bf,4)
             c = round(cf,2)
             d = round(df,0)
 
             formel = "y = " + "{:+}".format(a) + "x³ " + "{:+}".format(b)+ "x² " + "{:+}".format(c)+ "x " + "{:+}".format(d)
-
-        elif self.typ == 4:
-            af = fit[0]
-            bf = fit[1]
-            cf = fit[2]
-            df = fit[3]
-            ef = fit[4]
-
-            x = -sb
-            punkt = []      # hier geht es um die einzelnen Punkte der Kurve
-            while x < sb:
-                y = af*x**4 + bf*x**3 + cf*x**2 + df*x + ef # Gleichung der Funkion 4.Ordnung
-                punkt.append((x+ pva, -y + pha))
-                x += 1
-
-            self.zeichneFunktion(punkt)
-
-            a = round(af,7)
-            b = round(bf,6)
-            c = round(cf,4)
-            d = round(df,2)
-            e = round(ef,0)
-
-            formel = "y = " + "{:+}".format(a)+ "x**4 " +  "{:+}".format(b)+ "x³ " + "{:+}".format(c)+ "x² " + "{:+}".format(d)+ "x " + "{:+}".format(e)
 
         elif self.typ == 5:
             af = fit[0]
@@ -402,8 +392,8 @@ class Main_Window(Gtk.ApplicationWindow):
 
             self.zeichneFunktion(punkt)
 
-            a = round(af,4)
-            b = round(bf,3)
+            a = round(af,5)
+            b = round(bf,4)
             c = round(cf,0)
 
             formel = "x = " + "{:+}".format(a) + "y² " + "{:+}".format(b)+ "y " + "{:+}".format(c)
@@ -423,9 +413,9 @@ class Main_Window(Gtk.ApplicationWindow):
 
             self.zeichneFunktion(punkt)
 
-            a = round(af,5)
+            a = round(af,6)
             b = round(bf,4)
-            c = round(cf,2)
+            c = round(cf,3)
             d = round(df,0)
 
             formel = "x = " + "{:+}".format(a) + "y³ " + "{:+}".format(b)+ "y² " + "{:+}".format(c)+ "y " + "{:+}".format(d)
@@ -468,14 +458,6 @@ class Main_Window(Gtk.ApplicationWindow):
         if len(self.punkte) < 4:
             self.displayMessage(self.success, "Mindestens vier Punkte!")
         elif len(self.punkte) >= 4:
-            self.berechneZeichne(pva, pha)
-
-    def zeichneKurve4_O(self, widget):
-        self.typ = 4
-        print ("Kurve 4.Ordnung ", len(self.punkte), "Punkte")
-        if len(self.punkte) < 5:
-            self.displayMessage(self.success, "Mindestens fünf Punkte!")
-        elif len(self.punkte) >= 5:
             self.berechneZeichne(pva, pha)
 
     def zeichneParabelHor(self, widget):
