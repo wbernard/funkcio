@@ -11,51 +11,12 @@
         <property name="border-width">10</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkButton">
+            <property name="label">gtk-save</property>
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="homogeneous">True</property>
-            <child>
-              <object class="GtkButton">
-                <property name="label">gtk-save</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="use-stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="dark_mode_wdg">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="halign">center</property>
-                <property name="draw-indicator">False</property>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label">gtk-fullscreen</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
-                  </object>
-                </child>
-                <style>
-                  <class name="color-button"/>
-                  <class name="color-dark"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="use-stock">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -117,9 +78,6 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <style>
-              <class name="untereLeiste"/>
-            </style>
             <child>
               <object class="GtkLabel" id="textAusgabe">
                 <property name="visible">True</property>
@@ -143,6 +101,9 @@
                 <property name="position">1</property>
               </packing>
             </child>
+            <style>
+              <class name="untereLeiste"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -161,16 +122,13 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <style>
-              <class name="linked"/>
-            </style>
             <child>
               <object class="GtkRadioButton" id="quadranten1">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="draw_indicator">False</property>
                 <property name="tooltip-text" translatable="yes">1. Quadrant</property>
+                <property name="draw-indicator">False</property>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
@@ -179,15 +137,20 @@
                   </object>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="quadranten2">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="draw_indicator">False</property>
-                <property name="group">quadranten1</property>
                 <property name="tooltip-text" translatable="yes">vier Quadranten</property>
+                <property name="draw-indicator">False</property>
+                <property name="group">quadranten1</property>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
@@ -196,29 +159,71 @@
                   </object>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
+            <style>
+              <class name="linked"/>
+            </style>
           </object>
           <packing>
             <property name="position">1</property>
           </packing>
         </child>
-      <child>
-        <object class="GtkButton" id="gerade">
-          <property name="visible">True</property>
-          <property name="margin-left">10</property>
-          <property name="can-focus">True</property>
-          <property name="receives-default">True</property>
-          <property name="tooltip-text" translatable="yes">Gerade</property>
-          <signal name="clicked" handler="zeichneGerade" swapped="no"/>
-          <child>
-            <object class="GtkImage">
-              <property name="visible">True</property>
-              <property name="can-focus">False</property>
-              <property name="icon-name">function-linear-symbolic</property>
-            </object>
-          </child>
+        <child>
+          <object class="GtkMenuButton" id="menuKnopf">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <property name="valign">center</property>
+            <property name="popover">menu_popover</property>
+            <child>
+              <object class="GtkImage" id="menubutton">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">open-menu-symbolic</property>
+              </object>
+            </child>
           </object>
           <packing>
+            <property name="pack-type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="gerade">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Gerade</property>
+            <property name="margin-left">10</property>
+            <signal name="clicked" handler="zeichneGerade" swapped="no"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">function-linear-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="neustart">
+            <property name="label" translatable="yes">Reset</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <signal name="clicked" handler="neuStart" swapped="no"/>
+            <signal name="configure-event" handler="onConfigure" swapped="no"/>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -295,40 +300,6 @@
           </object>
           <packing>
             <property name="position">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="neustart">
-            <property name="label" translatable="yes">Reset</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <signal name="clicked" handler="neuStart" swapped="no"/>
-            <signal name="configure-event" handler="onConfigure" swapped="no"/>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="menuKnopf">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="receives-default">False</property>
-            <property name="valign">center</property>
-            <property name="popover">menu_popover</property>
-            <child>
-              <object class="GtkImage" id="menubutton">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">open-menu-symbolic</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
-            <property name="position">1</property>
           </packing>
         </child>
       </object>
