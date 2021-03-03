@@ -1,2 +1,2 @@
 # funkcitrovilo
-Ilo por trovi funkciojn
+Ilo por trovi simplajn funkciojn baze de enmetitaj punktoj
