@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="funkcio">
+	<schema id="im.bernard.funkcio" path="/im/bernard/funkcio/">
+	</schema>
+</schemalist>

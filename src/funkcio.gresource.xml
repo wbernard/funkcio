@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/im/bernard/funkcio">
+    <file>window.ui</file>
+
+    <!-- bildsimboloj por la variaj funkcioj -->
+    <file>icons/axes-four-quadrants-symbolic.svg</file>
+    <file>icons/axes-one-quadrant-symbolic.svg</file>
+    <file>icons/function-linear-symbolic.svg</file>
+    <file>icons/function-parable-horizontal-symbolic.svg</file>
+    <file>icons/function-parable-symbolic.svg</file>
+    <file>icons/function-third-order-horizontal-symbolic.svg</file>
+    <file>icons/function-third-order-symbolic.svg</file>
+  </gresource>
+</gresources>
+
+
