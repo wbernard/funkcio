@@ -59,6 +59,7 @@ class Main_Window(Gtk.ApplicationWindow):
     quadranten2   = Gtk.Template.Child()
     menuKnopf     = Gtk.Template.Child()
     speichern     = Gtk.Template.Child()
+    fixieren      = Gtk.Template.Child()
 
 
     def __init__(self, **kwargs):
@@ -79,6 +80,7 @@ class Main_Window(Gtk.ApplicationWindow):
         self.quadranten1.connect('clicked', self.einVierQuad, "1")
         self.quadranten2.connect('clicked', self.einVierQuad, "2")
         self.speichern.connect('clicked', self.saveImage)
+        self.fixieren.connect('clicked', self.letzteFunktion)
 
         self.linfarb     = [[0,0,0.5], [0.5,0,0.5],[0,0.5,0.5], [0.5,0,0], [0.5,0.5,0], [0,1,0] ]
         self.zeichneneu  = True
@@ -91,6 +93,7 @@ class Main_Window(Gtk.ApplicationWindow):
         self.crDicke     = 4
         self.punkte      = []
         self.anfang      = True
+        self.ende        = False
 
         self.quadranten1.set_active(True)
         self.quadranten2.set_active(False)
@@ -175,7 +178,7 @@ class Main_Window(Gtk.ApplicationWindow):
             cr.set_source_surface(self.surface, 0.0, 0.0)
             cr.paint()
             global sb, sh
-            sb = self.surface.get_width()
+            sb = self.surface.get_width()   # Breite der Zeichenebene
             sh = self.surface.get_height()
 
             #print ("ab", ab, ah)
@@ -183,7 +186,6 @@ class Main_Window(Gtk.ApplicationWindow):
             # bei Verkleinerung bleibt die alte Ebene
             if ab < sb and ah < sh:
                 return False
-
 
             if self.zeichneneu and self.quadra != 0:
                 global pva, pha
@@ -215,6 +217,14 @@ class Main_Window(Gtk.ApplicationWindow):
                     #pva = sb/self.quadra      # Position der vertikalen/horizontalen Achse
                     #pha = sh - sh/self.quadra
                     self.berechneZeichne(pva, pha)
+
+                if self.ende:
+                    self.cr.move_to(25+sb/2, sh-32)
+                    self.cr.set_font_size(16)
+                    print ("Formel:", formel)
+                    self.cr.show_text(formel)
+                else:
+                    pass
 
                 #self.drawArea.queue_draw()
 
@@ -309,6 +319,7 @@ class Main_Window(Gtk.ApplicationWindow):
         print (n)
         xp = []
         yp = []
+        global formel
 
         for i in range(n):
             xp.append(self.punkte[i][0])
@@ -508,6 +519,11 @@ class Main_Window(Gtk.ApplicationWindow):
         now = datetime.datetime.now()
         name = now.strftime("%m-%d-%Y %H:%M:%S")
         self.surface.write_to_png(name + '.png')
+
+    def letzteFunktion(self, widget):
+        self.ende = True
+        self.zeichneneu = True
+        self.onDraw(self.drawArea, self.cr)
 
 
     @threaded

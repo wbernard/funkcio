@@ -11,21 +11,6 @@
         <property name="border-width">10</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkButton" id="speichern">
-            <property name="label">gtk-save</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="use-stock">True</property>
-            <signal name="clicked" handler="saveImage" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkSeparator">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -181,9 +166,6 @@
               <class name="linked"/>
             </style>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkMenuButton" id="menuKnopf">
@@ -206,6 +188,20 @@
           </packing>
         </child>
         <child>
+          <object class="GtkButton" id="neustart">
+            <property name="label" translatable="yes">Reset</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <signal name="clicked" handler="neuStart" swapped="no"/>
+            <signal name="configure-event" handler="onConfigure" swapped="no"/>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkButton" id="gerade">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
@@ -222,7 +218,7 @@
             </child>
           </object>
           <packing>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -241,7 +237,35 @@
             </child>
           </object>
           <packing>
-            <property name="position">3</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="speichern">
+            <property name="label">gtk-save</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="use-stock">True</property>
+            <signal name="clicked" handler="saveImage" swapped="no"/>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+            <property name="position">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="fixieren">
+            <property name="label">Fix</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="use-stock">True</property>
+            <signal name="clicked" handler="letzteFunktion" swapped="no"/>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+            <property name="position">6</property>
           </packing>
         </child>
         <child>
@@ -260,7 +284,7 @@
             </child>
           </object>
           <packing>
-            <property name="position">4</property>
+            <property name="position">6</property>
           </packing>
         </child>
         <child>
@@ -279,7 +303,7 @@
             </child>
           </object>
           <packing>
-            <property name="position">5</property>
+            <property name="position">7</property>
           </packing>
         </child>
         <child>
@@ -297,21 +321,7 @@
             </child>
           </object>
           <packing>
-            <property name="position">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="neustart">
-            <property name="label" translatable="yes">Reset</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <signal name="clicked" handler="neuStart" swapped="no"/>
-            <signal name="configure-event" handler="onConfigure" swapped="no"/>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
-            <property name="position">7</property>
+            <property name="position">8</property>
           </packing>
         </child>
       </object>
