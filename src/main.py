@@ -39,7 +39,7 @@ from .window import Main_Window
 
 class Application(Gtk.Application):
     def __init__(self):
-        super().__init__(application_id='im.bernard.funkcitrovilo',
+        super().__init__(application_id='im.bernard.funkcio',
                          flags=Gio.ApplicationFlags.FLAGS_NONE)
 
     def do_activate(self):

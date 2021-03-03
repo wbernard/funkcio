@@ -1,2 +1,2 @@
-# funkcitrovilo
+# funkcio
 Ilo por trovi funkciojn

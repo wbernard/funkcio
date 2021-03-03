@@ -39,7 +39,7 @@ def threaded(fn):
 
     return wrapper
 
-@Gtk.Template(resource_path='/im/bernard/funkcitrovilo/window.ui')
+@Gtk.Template(resource_path='/im/bernard/funkcio/window.ui')
 
 class Main_Window(Gtk.ApplicationWindow):
     __gtype_name__ = 'Main_Window'

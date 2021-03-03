@@ -1,9 +1,9 @@
 pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
-moduledir = join_paths(pkgdatadir, 'funkcitrovilo')
+moduledir = join_paths(pkgdatadir, 'funkcio')
 gnome = import('gnome')
 
-gnome.compile_resources('funkcitrovilo',
-  'funkcitrovilo.gresource.xml',
+gnome.compile_resources('funkcio',
+  'funkcio.gresource.xml',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
@@ -18,17 +18,17 @@ conf.set('localedir', join_paths(get_option('prefix'), get_option('localedir')))
 conf.set('pkgdatadir', pkgdatadir)
 
 configure_file(
-  input: 'funkcitrovilo.in',
-  output: 'funkcitrovilo',
+  input: 'funkcio.in',
+  output: 'funkcio',
   configuration: conf,
   install: true,
   install_dir: get_option('bindir')
 )
 
-funkcitrovilo_sources = [
+funkcio_sources = [
   '__init__.py',
   'main.py',
   'window.py',
 ]
 
-install_data(funkcitrovilo_sources, install_dir: moduledir)
+install_data(funkcio_sources, install_dir: moduledir)

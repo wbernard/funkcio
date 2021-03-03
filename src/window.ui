@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.38.2 -->
-<interface domain="funkcitrovilo">
+<interface domain="funkcio">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkPopover" id="menu_popover">
     <property name="can-focus">False</property>
@@ -29,7 +29,7 @@
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="action-name">app.about</property>
-            <property name="text" translatable="yes">pri funkcitrovilo</property>
+            <property name="text" translatable="yes">pri funkcio</property>
           </object>
           <packing>
             <property name="expand">False</property>
