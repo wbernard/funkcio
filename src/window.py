@@ -58,6 +58,7 @@ class Main_Window(Gtk.ApplicationWindow):
     quadranten1   = Gtk.Template.Child()
     quadranten2   = Gtk.Template.Child()
     menuKnopf     = Gtk.Template.Child()
+    speichern     = Gtk.Template.Child()
 
 
     def __init__(self, **kwargs):
@@ -77,6 +78,7 @@ class Main_Window(Gtk.ApplicationWindow):
         self.neustart.connect('clicked', self.neuStart)
         self.quadranten1.connect('clicked', self.einVierQuad, "1")
         self.quadranten2.connect('clicked', self.einVierQuad, "2")
+        self.speichern.connect('clicked', self.saveImage)
 
         self.linfarb     = [[0,0,0.5], [0.5,0,0.5],[0,0.5,0.5], [0.5,0,0], [0.5,0.5,0], [0,1,0] ]
         self.zeichneneu  = True
@@ -88,12 +90,13 @@ class Main_Window(Gtk.ApplicationWindow):
         self.crFarbe     = [1.0, 0.0, 0.0, 1.0]
         self.crDicke     = 4
         self.punkte      = []
+        self.anfang      = True
 
         self.quadranten1.set_active(True)
         self.quadranten2.set_active(False)
 
         self.success    = "#88cc27"
-        self.warning    = "#ffa800"
+        self.warning    = "#00008b"
         self.error      = "#ff0000"
 
     def einVierQuad(self, widget, name):
@@ -133,7 +136,7 @@ class Main_Window(Gtk.ApplicationWindow):
 
         _surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, ab, ah)
 
-        # wenn das fenster verändert wird wird eine neue Zeichenebene erstellt
+        # wenn das fenster verändert wird, wird eine neue Zeichenebene erstellt
         if self.surface is not None:
             #global sb, sh
             sb = self.surface.get_width()
@@ -186,7 +189,12 @@ class Main_Window(Gtk.ApplicationWindow):
                 global pva, pha
                 pva = sb/self.quadra
                 pha = sh - sh/self.quadra
-                print ("1pva =", pva, "pha =", pha)
+
+                if self.anfang:
+                    self.zeigeAnweisung(self.warning, "Klicke auf eine beliebige Anzahl Punkte im Koordinatensystem \n und wähle dann die gewünschte Funktion!")
+                    self.anfang = False
+                else:
+                    pass
 
                 self.cr.rectangle(0, 0, sb, sh)  # x, y, width, height
                 self.cr.set_operator(0);
@@ -488,12 +496,23 @@ class Main_Window(Gtk.ApplicationWindow):
         markup = "<span foreground='" + type + "'>" + text + "</span>"
         self.messageLabel.set_markup(markup)
         self.messageWidget.popup()
-        self.hideMessageTimed()
+        self.hideMessageTimed(1)
+
+    def zeigeAnweisung(self, type, text):
+        markup = "<span foreground='" + type + "'>" + text + "</span>"
+        self.messageLabel.set_markup(markup)
+        self.messageWidget.popup()
+        self.hideMessageTimed(4)
+
+    def saveImage(self,widget):   # speichert mit datum und Uhrzeit in den home-Ordner
+        now = datetime.datetime.now()
+        name = now.strftime("%m-%d-%Y %H:%M:%S")
+        self.surface.write_to_png(name + '.png')
 
 
     @threaded
-    def hideMessageTimed(self):
-        time.sleep(1)
+    def hideMessageTimed(self,t):
+        time.sleep(t)
         GLib.idle_add(self.messageWidget.popdown)
 
 
