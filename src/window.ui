@@ -86,18 +86,6 @@
                 <property name="position">0</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkLabel" id="textAusgabe1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="pack-type">end</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
             <style>
               <class name="untereLeiste"/>
             </style>
@@ -252,20 +240,6 @@
           <packing>
             <property name="pack-type">end</property>
             <property name="position">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="fixieren">
-            <property name="label">Fix</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="use-stock">True</property>
-            <signal name="clicked" handler="letzteFunktion" swapped="no"/>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
-            <property name="position">6</property>
           </packing>
         </child>
         <child>

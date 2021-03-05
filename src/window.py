@@ -48,7 +48,6 @@ class Main_Window(Gtk.ApplicationWindow):
     messageLabel  = Gtk.Template.Child()
     messageWidget = Gtk.Template.Child()
     textAusgabe   = Gtk.Template.Child()
-    textAusgabe1  = Gtk.Template.Child()
     gerade        = Gtk.Template.Child()
     parabel       = Gtk.Template.Child()
     kurve3o       = Gtk.Template.Child()
@@ -59,7 +58,6 @@ class Main_Window(Gtk.ApplicationWindow):
     quadranten2   = Gtk.Template.Child()
     menuKnopf     = Gtk.Template.Child()
     speichern     = Gtk.Template.Child()
-    fixieren      = Gtk.Template.Child()
 
 
     def __init__(self, **kwargs):
@@ -80,7 +78,6 @@ class Main_Window(Gtk.ApplicationWindow):
         self.quadranten1.connect('clicked', self.einVierQuad, "1")
         self.quadranten2.connect('clicked', self.einVierQuad, "2")
         self.speichern.connect('clicked', self.saveImage)
-        self.fixieren.connect('clicked', self.letzteFunktion)
 
         self.linfarb     = [[0,0,0.5], [0.5,0,0.5],[0,0.5,0.5], [0.5,0,0], [0.5,0.5,0], [0,1,0] ]
         self.zeichneneu  = True
@@ -105,14 +102,12 @@ class Main_Window(Gtk.ApplicationWindow):
     def einVierQuad(self, widget, name):
         if name == "1":
             self.quadra = 8
-            print ("Hallo 1")
             self.zeichneneu    = True
             self.onDraw(self.drawArea, self.cr)
             self.drawArea.queue_draw()
 
         elif name == "2":
             self.quadra = 2
-            print ("Hallo 2")
             self.zeichneneu    = True
             self.onDraw(self.drawArea, self.cr)
             self.drawArea.queue_draw()
@@ -179,10 +174,8 @@ class Main_Window(Gtk.ApplicationWindow):
             cr.paint()
             global sb, sh
             sb = self.surface.get_width()   # Breite der Zeichenebene
-            sh = self.surface.get_height()
+            sh = self.surface.get_height()  # Höhe der Zeichenebene
 
-            #print ("ab", ab, ah)
-            #print ("sb", sb, sh)
             # bei Verkleinerung bleibt die alte Ebene
             if ab < sb and ah < sh:
                 return False
@@ -209,17 +202,15 @@ class Main_Window(Gtk.ApplicationWindow):
                 for p in self.punkte:
                     x1 = p[0] + pva
                     y1 = -p[1] + pha
-                    print ("pva =", pva, "pha =", pha)
-                    print ("Punkt", p, x1, y1)
+                    #print ("pva =", pva, "pha =", pha)
+                    #print ("Punkt", p, x1, y1)
                     self.zeichnePunkt(x1, y1, pva, pha)
 
                 if self.typ != 0:
-                    #pva = sb/self.quadra      # Position der vertikalen/horizontalen Achse
-                    #pha = sh - sh/self.quadra
                     self.berechneZeichne(pva, pha)
 
                 if self.ende:
-                    self.cr.move_to(25+sb/2, sh-32)
+                    self.cr.move_to(70+sb/2, sh-40)
                     self.cr.set_font_size(16)
                     print ("Formel:", formel)
                     self.cr.show_text(formel)
@@ -256,7 +247,7 @@ class Main_Window(Gtk.ApplicationWindow):
 
         x = int(x1- pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
         y = int(-y1+pha)
-        print("(" + str(x) + ", " + str(y) + ")")
+        #print("(" + str(x) + ", " + str(y) + ")")
 
         self.zeichnePunkt(x1,y1,pva,pha)
 
@@ -276,11 +267,8 @@ class Main_Window(Gtk.ApplicationWindow):
         self.cr.fill()
 
         self.zeichneAchsen(pva, pha)
-        '''self.cr.set_operator(1)
-        self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
-        self.linio(pva, 0, pva, sh)'''
 
-        self.textAusgabe1.set_text("")
+        #self.textAusgabe1.set_text("")
         self.drawArea.queue_draw()
 
         del self.punkte[:]
@@ -304,8 +292,6 @@ class Main_Window(Gtk.ApplicationWindow):
         self.cr.set_font_size(12)
         x = int(x1 - pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
         y = int(-y1 + pha)
-        print ("2 pva pha", pva, pha)
-        print ("ja", x, y)
         self.cr.show_text(str(x) + ", " + str(y))
 
         #self.drawArea.queue_draw()
@@ -316,7 +302,7 @@ class Main_Window(Gtk.ApplicationWindow):
     def berechneZeichne(self, pva, pha):
 
         n = len(self.punkte)
-        print (n)
+        #print (n)
         xp = []
         yp = []
         global formel
@@ -370,7 +356,7 @@ class Main_Window(Gtk.ApplicationWindow):
             self.zeichneFunktion(punkt)
 
             a = round(af,5)
-            b = round(bf,4)
+            b = round(bf,3)
             c = round(cf,0)
 
             formel = "y = " + "{:+}".format(a) + "x²  " + "{:+}".format(b)+ "x  " + "{:+}".format(c)
@@ -390,8 +376,8 @@ class Main_Window(Gtk.ApplicationWindow):
 
             self.zeichneFunktion(punkt)
 
-            a = round(af,6)
-            b = round(bf,4)
+            a = round(af,8)
+            b = round(bf,5)
             c = round(cf,2)
             d = round(df,0)
 
@@ -412,7 +398,7 @@ class Main_Window(Gtk.ApplicationWindow):
             self.zeichneFunktion(punkt)
 
             a = round(af,5)
-            b = round(bf,4)
+            b = round(bf,3)
             c = round(cf,0)
 
             formel = "x = " + "{:+}".format(a) + "y² " + "{:+}".format(b)+ "y " + "{:+}".format(c)
@@ -432,15 +418,16 @@ class Main_Window(Gtk.ApplicationWindow):
 
             self.zeichneFunktion(punkt)
 
-            a = round(af,6)
-            b = round(bf,4)
+            a = round(af,8)
+            b = round(bf,5)
             c = round(cf,3)
             d = round(df,0)
 
             formel = "x = " + "{:+}".format(a) + "y³ " + "{:+}".format(b)+ "y² " + "{:+}".format(c)+ "y " + "{:+}".format(d)
 
-        self.textAusgabe1.set_text(formel)
+        #self.textAusgabe1.set_text(formel)
         self.drawArea.queue_draw()
+
 
     def zeichneFunktion(self,punkt):
 
@@ -461,15 +448,16 @@ class Main_Window(Gtk.ApplicationWindow):
             self.displayMessage(self.success, "Mindestens zwei Punkte!")
         elif len(self.punkte) >= 2:
             self.berechneZeichne(pva, pha)
+            self.letzteFunktion(widget)
 
     def zeichneParabel(self, widget):
         self.typ = 2
-        print ("Parabel ", len(self.punkte), "Punkte Quadranten", pva, pha)
+        print ("Parabel ", len(self.punkte), "Punkte")
         if len(self.punkte) < 3:
             self.displayMessage(self.success, "Mindestens drei Punkte!")
         elif len(self.punkte) >= 3:
             self.berechneZeichne(pva, pha)
-
+            self.letzteFunktion(widget)
 
     def zeichneKurve3_O(self, widget):
         self.typ = 3
@@ -478,6 +466,7 @@ class Main_Window(Gtk.ApplicationWindow):
             self.displayMessage(self.success, "Mindestens vier Punkte!")
         elif len(self.punkte) >= 4:
             self.berechneZeichne(pva, pha)
+            self.letzteFunktion(widget)
 
     def zeichneParabelHor(self, widget):
         self.typ = 5
@@ -486,6 +475,7 @@ class Main_Window(Gtk.ApplicationWindow):
             self.displayMessage(self.success, "Mindestens drei Punkte!")
         elif len(self.punkte) >= 3:
             self.berechneZeichne(pva, pha)
+            self.letzteFunktion(widget)
 
     def zeichneKurve3_OHor(self, widget):
         self.typ = 6
@@ -494,6 +484,7 @@ class Main_Window(Gtk.ApplicationWindow):
             self.displayMessage(self.success, "Mindestens vier Punkte!")
         elif len(self.punkte) >= 4:
             self.berechneZeichne(pva, pha)
+            self.letzteFunktion(widget)
 
     def linio(self, x1, y1, x2, y2):
         self.cr.move_to(x1, y1)
