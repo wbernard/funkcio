@@ -79,7 +79,7 @@ class Main_Window(Gtk.ApplicationWindow):
         self.quadranten2.connect('clicked', self.einVierQuad, "2")
         self.speichern.connect('clicked', self.saveImage)
 
-        self.linfarb     = [[0,0,0.5], [0.5,0,0.5],[0,0.5,0.5], [0.5,0,0], [0.5,0.5,0], [0,1,0] ]
+        self.linfarb     = [[0,0,0.6], [0.5,0,0.5],[0,0.5,0.5], [0.3,0,0], [0.3,0.4,0], [0,0.5,0] ]
         self.zeichneneu  = True
         self.quadra      = 8
         self.typ         = 0
@@ -154,7 +154,7 @@ class Main_Window(Gtk.ApplicationWindow):
             self.aktBreite   = ab
             self.aktHoehe  = ah
 
-            self.zeichneneu    = True     # d.h. dass in onDraw die Zeichenfläche neu gezeichnet wird
+            self.zeichneneu    = True  # d.h. dass in onDraw die Zeichenfläche neu gezeichnet wird
 
 
         else:
@@ -186,7 +186,7 @@ class Main_Window(Gtk.ApplicationWindow):
                 pha = sh - sh/self.quadra
 
                 if self.anfang:
-                    self.zeigeAnweisung(self.warning, "Klicke auf eine beliebige Anzahl Punkte im Koordinatensystem \n und wähle dann die gewünschte Funktion!")
+                    self.zeigeAnweisung(self.warning, _("Klicke auf eine beliebige Anzahl Punkte im Koordinatensystem \n und wähle dann die gewünschte Funktion!"))
                     self.anfang = False
                 else:
                     pass
@@ -212,7 +212,7 @@ class Main_Window(Gtk.ApplicationWindow):
                 if self.ende:
                     self.cr.move_to(70+sb/2, sh-40)
                     self.cr.set_font_size(16)
-                    print ("Formel:", formel)
+                    print (_("Gleichung:"), formel)
                     self.cr.show_text(formel)
                 else:
                     pass
@@ -370,7 +370,7 @@ class Main_Window(Gtk.ApplicationWindow):
             x = -sb
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
             while x < sb:
-                y = af*x**3 + bf*x**2 + cf*x + df  # Gleichung der Funkion 3.Ordnung
+                y = af*x**3 + bf*x**2 + cf*x + df  # Gleichung der Funkion 3.Grades
                 punkt.append((x+ pva, -y + pha))
                 x += 1
 
@@ -412,7 +412,7 @@ class Main_Window(Gtk.ApplicationWindow):
             x = -sb
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
             while x < sb:
-                y = af*x**3 + bf*x**2 + cf*x + df  # Gleichung der Funkion 3.Ordnung
+                y = af*x**3 + bf*x**2 + cf*x + df  # Gleichung der Funkion 3.Grades
                 punkt.append((y+ pva, -x + pha))
                 x += 1
 
@@ -437,51 +437,51 @@ class Main_Window(Gtk.ApplicationWindow):
 
         self.cr.set_line_width(2)
         i = self.typ-1
-        f =self.linfarb
+        f = self.linfarb
         self.cr.set_source_rgb(f[i][0],f[i][1],f[i][2])
         self.cr.stroke()
 
     def zeichneGerade(self, widget):
         self.typ = 1
-        print ("Gerade ", len(self.punkte), "Punkte")
+        print (_("Gerade "), len(self.punkte), _("Punkte"))
         if  len(self.punkte) < 2:
-            self.displayMessage(self.success, "Mindestens zwei Punkte!")
+            self.displayMessage(self.success, _("Mindestens zwei Punkte!"))
         elif len(self.punkte) >= 2:
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
 
     def zeichneParabel(self, widget):
         self.typ = 2
-        print ("Parabel ", len(self.punkte), "Punkte")
+        print (_("Parabel "), len(self.punkte), _("Punkte"))
         if len(self.punkte) < 3:
-            self.displayMessage(self.success, "Mindestens drei Punkte!")
+            self.displayMessage(self.success, _("Mindestens drei Punkte!"))
         elif len(self.punkte) >= 3:
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
 
     def zeichneKurve3_O(self, widget):
         self.typ = 3
-        print ("Kurve 3.Ordnung ", len(self.punkte), "Punkte")
+        print (_("Kurve 3.Grad "), len(self.punkte), _("Punkte"))
         if len(self.punkte) < 4:
-            self.displayMessage(self.success, "Mindestens vier Punkte!")
+            self.displayMessage(self.success, _("Mindestens vier Punkte!"))
         elif len(self.punkte) >= 4:
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
 
     def zeichneParabelHor(self, widget):
         self.typ = 5
-        print ("Parabel horizontal ", len(self.punkte), "Punkte")
+        print (_("Parabel horizontal "), len(self.punkte), _("Punkte"))
         if len(self.punkte) < 3:
-            self.displayMessage(self.success, "Mindestens drei Punkte!")
+            self.displayMessage(self.success, _("Mindestens drei Punkte!"))
         elif len(self.punkte) >= 3:
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
 
     def zeichneKurve3_OHor(self, widget):
         self.typ = 6
-        print ("Kurve 3.Ord.horizontal ", len(self.punkte), "Punkte")
+        print (_("Kurve 3.Grad horizontal "), len(self.punkte), _("Punkte"))
         if len(self.punkte) < 4:
-            self.displayMessage(self.success, "Mindestens vier Punkte!")
+            self.displayMessage(self.success, _("Mindestens vier Punkte!"))
         elif len(self.punkte) >= 4:
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
@@ -515,7 +515,6 @@ class Main_Window(Gtk.ApplicationWindow):
         self.ende = True
         self.zeichneneu = True
         self.onDraw(self.drawArea, self.cr)
-
 
     @threaded
     def hideMessageTimed(self,t):
