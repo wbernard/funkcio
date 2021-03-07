@@ -43,10 +43,40 @@ class Application(Gtk.Application):
                          flags=Gio.ApplicationFlags.FLAGS_NONE)
 
     def do_activate(self):
-        win = self.props.active_window
-        if not win:
-            win = Main_Window(application=self)
-        win.present()
+        self.win = self.props.active_window
+        if not self.win:
+            self.win = Main_Window(application=self)
+        self.win.present()
+
+        self.AktionMenu()
+
+
+    def AktionMenu(self):
+        infoAktion = Gio.SimpleAction.new("about", None)
+        infoAktion.connect("activate", self.beiInfoKlick)
+        self.add_action(infoAktion)
+
+
+    def beiInfoKlick(self, action, widget):
+        infoDialog = Gtk.AboutDialog()
+        infoDialog.set_logo_icon_name("im.bernard.funkcio")
+        infoDialog.set_destroy_with_parent(True)
+        infoDialog.set_name("Funkcio")
+        infoDialog.set_version("0.7")
+        infoDialog.set_authors(["Walter Bernard"])
+        infoDialog.set_artists(["Tobias Bernard"])
+        infoDialog.set_license_type(Gtk.License.GPL_3_0)
+        infoDialog.set_copyright("© 2021 Walter Bernard")
+        infoDialog.set_modal(True)
+        infoDialog.set_transient_for(self.win)
+
+
+        infoDialog.run()
+        infoDialog.destroy()
+
+        print ("pinko2")
+
+
 
 
 def main(version):

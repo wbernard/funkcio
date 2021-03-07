@@ -59,7 +59,6 @@ class Main_Window(Gtk.ApplicationWindow):
     menuKnopf     = Gtk.Template.Child()
     speichern     = Gtk.Template.Child()
 
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -515,6 +514,7 @@ class Main_Window(Gtk.ApplicationWindow):
         self.ende = True
         self.zeichneneu = True
         self.onDraw(self.drawArea, self.cr)
+
 
     @threaded
     def hideMessageTimed(self,t):
