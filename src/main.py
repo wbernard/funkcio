@@ -70,13 +70,8 @@ class Application(Gtk.Application):
         infoDialog.set_modal(True)
         infoDialog.set_transient_for(self.win)
 
-
         infoDialog.run()
         infoDialog.destroy()
-
-        print ("pinko2")
-
-
 
 
 def main(version):
