@@ -1,0 +1,110 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the funkcio package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: funkcio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-06 18:16+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/im.bernard.funkcio.desktop.in:3
+msgid "funkcio"
+msgstr ""
+
+#: src/window.ui:32
+msgid "Info zu funkcio"
+msgstr ""
+
+#: src/window.ui:115
+msgid "1. Quadrant"
+msgstr ""
+
+#: src/window.ui:136
+msgid "vier Quadranten"
+msgstr ""
+
+#: src/window.ui:183
+msgid "Reset"
+msgstr ""
+
+#: src/window.ui:204
+msgid "Gerade"
+msgstr ""
+
+#: src/window.ui:224
+msgid "Parabel vertikal"
+msgstr ""
+
+#: src/window.ui:243
+msgid "Speichern"
+msgstr ""
+
+#: src/window.ui:263
+msgid "Kurve 3.Grad vertikal"
+msgstr ""
+
+#: src/window.ui:282
+msgid "Parabel horizontal"
+msgstr ""
+
+#: src/window.ui:301
+msgid "Kurve 3.Grad horizontal"
+msgstr ""
+
+#: src/window.py:189
+msgid ""
+"Klicke auf eine beliebige Anzahl Punkte im Koordinatensystem \n"
+" und wähle dann die gewünschte Funktion!"
+msgstr ""
+
+#: src/window.py:215
+msgid "Gleichung:"
+msgstr ""
+
+#: src/window.py:446
+msgid "Gerade "
+msgstr ""
+
+#: src/window.py:446 src/window.py:455 src/window.py:464 src/window.py:473
+#: src/window.py:482
+msgid "Punkte"
+msgstr ""
+
+#: src/window.py:448
+msgid "Mindestens zwei Punkte!"
+msgstr ""
+
+#: src/window.py:455
+msgid "Parabel "
+msgstr ""
+
+#: src/window.py:457 src/window.py:475
+msgid "Mindestens drei Punkte!"
+msgstr ""
+
+#: src/window.py:464
+msgid "Kurve 3.Grad "
+msgstr ""
+
+#: src/window.py:466 src/window.py:484
+msgid "Mindestens vier Punkte!"
+msgstr ""
+
+#: src/window.py:473
+msgid "Parabel horizontal "
+msgstr ""
+
+#: src/window.py:482
+msgid "Kurve 3.Grad horizontal "
+msgstr ""
