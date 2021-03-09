@@ -51,22 +51,17 @@ class Application(Gtk.Application):
 
         self.aktionMenu()
 
-
     def aktionMenu(self):
         infoAktion = Gio.SimpleAction.new("about", None)
         infoAktion.connect("activate", self.beiInfoKlick)
         self.add_action(infoAktion)
-        tastAktion = Gio.SimpleAction.new("shortcuts", None)
-        tastAktion.connect("activate", self.kurzTastKlick)
-        self.add_action(tastAktion)
-
 
     def beiInfoKlick(self, action, widget):
         infoDialog = Gtk.AboutDialog()
         infoDialog.set_logo_icon_name("im.bernard.funkcio")
         infoDialog.set_destroy_with_parent(True)
         infoDialog.set_name("Funkcio")
-        infoDialog.set_version("0.7")
+        infoDialog.set_version("0.1")
         infoDialog.set_authors(["Walter Bernard"])
         infoDialog.set_artists(["Tobias Bernard"])
         infoDialog.set_license_type(Gtk.License.GPL_3_0)
@@ -76,40 +71,6 @@ class Application(Gtk.Application):
 
         infoDialog.run()
         infoDialog.destroy()
-
-    def kurzTastKlick(self, action, widget):
-        self.builder = Gtk.Builder()
-        self.builder.add_from_resource("/im/bernard/funkcio/shortcuts.ui")
-        shortcuts = self.builder.get_object("shortcuts_overview")
-        print(shortcuts)
-        if self.win is not NotImplemented:
-           shortcuts.set_transient_for(self.win)
-        shortcuts.show()
-
-        #self.quit = Gtk.main_quit()
-        self.accelerator = Gtk.AccelGroup()
-        self.win.add_accel_group(self.accelerator)
-        #self.entry = self.builder.get_object("entry1")
-        self.add_accelerator("activate", "entry1", "<Control>q")
-
-        print ("pinker")
-
-    '''
-    def add_accelerator(self):
-        self.application.set_accels_for_action('win.quit', ['<Control>q'])
-        self.application.set_accels_for_action('win.save', ['<Control>s'])
-
-
-    def add_actions(self):
-        quit_action = Gio.SimpleAction.new('quit', None)
-        quit_action.connect('activate', self.quit)
-        self.application.add_action(quit_action)
-
-        save_action = Gio.SimpleAction.new('save', None)
-        save_action.connect('activate', self.win.saveImage)
-        self.application.add_action(save_action)'''
-
-
 
 def main(version):
     app = Application()

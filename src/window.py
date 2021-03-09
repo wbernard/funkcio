@@ -78,14 +78,14 @@ class Main_Window(Gtk.ApplicationWindow):
         self.quadranten2.connect('clicked', self.einVierQuad, "2")
         self.speichern.connect('clicked', self.saveImage)
 
-        self.linfarb     = [[0,0,0.6], [0.5,0,0.5],[0,0.5,0.5], [0.3,0,0], [0.3,0.4,0], [0,0.5,0] ]
+        self.linfarb     = [[0.1,0.37,0.71], [0.38,0.21,0.51],[0.15,0.64,0.41], [0.65,0.11,0.18], [0.39,0.27,0.17]]
         self.zeichneneu  = True
         self.quadra      = 8
         self.typ         = 0
         self.surface     = None
         self.aktBreite   = 0
         self.aktHoehe    = 0
-        self.crFarbe     = [1.0, 0.0, 0.0, 1.0]
+        self.crFarbe     = [0.88, 0.11, 0.14, 1.0]
         self.crDicke     = 4
         self.punkte      = []
         self.anfang      = True
@@ -325,10 +325,10 @@ class Main_Window(Gtk.ApplicationWindow):
         ya = np.array(yp)
 
         # fit gibt die Faktoren der Kurvengleichung aus
-        if self.typ == 5:
+        if self.typ == 4:
             fit = np.polyfit(ya,xa,2)  # horizonzale Parabel vertauscht x und y Werte
             #print (fit)
-        elif self.typ == 6:
+        elif self.typ == 5:
             fit = np.polyfit(ya,xa,3)  # horizonzale Kurve vertauscht x und y Werte
             #print (fit)
         else:
@@ -371,7 +371,7 @@ class Main_Window(Gtk.ApplicationWindow):
 
             formel = "y = " + "{:+}".format(a) + "x²  " + "{:+}".format(b)+ "x  " + "{:+}".format(c)
 
-        elif self.typ == 3:
+        elif self.typ == 3:   # 3. Grades vertikal
             af = fit[0]
             bf = fit[1]
             cf = fit[2]
@@ -393,7 +393,7 @@ class Main_Window(Gtk.ApplicationWindow):
 
             formel = "y = " + "{:+}".format(a) + "x³ " + "{:+}".format(b)+ "x² " + "{:+}".format(c)+ "x " + "{:+}".format(d)
 
-        elif self.typ == 5:
+        elif self.typ == 4:  # Parabel horizontal
             af = fit[0]
             bf = fit[1]
             cf = fit[2]
@@ -413,7 +413,7 @@ class Main_Window(Gtk.ApplicationWindow):
 
             formel = "x = " + "{:+}".format(a) + "y² " + "{:+}".format(b)+ "y " + "{:+}".format(c)
 
-        elif self.typ == 6:
+        elif self.typ == 5:
             af = fit[0]
             bf = fit[1]
             cf = fit[2]
@@ -479,7 +479,7 @@ class Main_Window(Gtk.ApplicationWindow):
             self.letzteFunktion(widget)
 
     def zeichneParabelHor(self, widget):
-        self.typ = 5
+        self.typ = 4
         print (_("Parabel horizontal "), len(self.punkte), _("Punkte"))
         if len(self.punkte) < 3:
             self.displayMessage(self.success, _("Mindestens drei Punkte!"))
@@ -488,7 +488,7 @@ class Main_Window(Gtk.ApplicationWindow):
             self.letzteFunktion(widget)
 
     def zeichneKurve3_OHor(self, widget):
-        self.typ = 6
+        self.typ = 5
         print (_("Kurve 3.Grad horizontal "), len(self.punkte), _("Punkte"))
         if len(self.punkte) < 4:
             self.displayMessage(self.success, _("Mindestens vier Punkte!"))
