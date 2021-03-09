@@ -128,7 +128,7 @@
               <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="icon-name">help-about-symbolic</property>
+                <property name="icon-name">info-symbolic</property>
               </object>
             </child>
           </object>
@@ -149,13 +149,13 @@
               <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="icon-name">edit-delete-symbolic</property>
+                <property name="icon-name">user-trash-symbolic</property>
               </object>
             </child>
           </object>
           <packing>
             <property name="pack-type">end</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -214,7 +214,7 @@
           </object>
           <packing>
             <property name="pack-type">end</property>
-            <property name="position">5</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>

@@ -56,9 +56,7 @@ class Main_Window(Gtk.ApplicationWindow):
     neustart      = Gtk.Template.Child()
     quadranten1   = Gtk.Template.Child()
     quadranten2   = Gtk.Template.Child()
-    #menuKnopf     = Gtk.Template.Child()
     speichern     = Gtk.Template.Child()
-    #menuTasteKurz = Gtk.Template.Child()
     infoKnopf     = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
@@ -256,8 +254,19 @@ class Main_Window(Gtk.ApplicationWindow):
 
     def zeichneAchsen(self, pva, pha):
         self.cr.set_operator(1)
-        self.linio(0, pha, sb, pha) # zeichnet die horizontale Achse
-        self.linio(pva, 0, pva, sh)
+        self.linio(0, pha, sb, pha, 1.8) # zeichnet die horizontale Achse
+        self.linio(pva, 0, pva, sh, 1.8)
+        aa = 0
+        rw = 50
+        while (aa < sh):
+            aa = aa + rw
+            self.linio(0, pha+aa, sb, pha+aa, 0.2) # zeichnet horizontale Rasterlinien
+            self.linio(0, pha-aa, sb, pha-aa, 0.2)
+        aa = 0
+        while (aa < sb):
+            aa = aa + rw
+            self.linio(pva+aa, 0, pva+aa, sh, 0.2) # zeichnet vertikale Rasterlinien
+            self.linio(pva-aa, 0, pva-aa, sh, 0.2)
 
     def neuStart(self, widget):
 
@@ -487,12 +496,12 @@ class Main_Window(Gtk.ApplicationWindow):
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
 
-    def linio(self, x1, y1, x2, y2):
+    def linio(self, x1, y1, x2, y2, sd):  # Anfangspunkt, Endpunkt und Stridicke werden benötigt
         self.cr.move_to(x1, y1)
         self.cr.line_to(x2, y2)
 
         self.cr.set_source_rgb(0, 0, 0)
-        self.cr.set_line_width(1.5)
+        self.cr.set_line_width(sd)
         self.cr.stroke()
 
     def displayMessage(self, type, text):
