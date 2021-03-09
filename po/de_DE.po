@@ -49,8 +49,8 @@ msgid "Parabel vertikal"
 msgstr "Parabel vertikal"
 
 #: src/window.ui:243
-msgid "Speichern"
-msgstr "Speichern"
+msgid "Speichern als png"
+msgstr "Speichern als png"
 
 #: src/window.ui:263
 msgid "Kurve 3.Grad vertikal"

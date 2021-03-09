@@ -56,8 +56,10 @@ class Main_Window(Gtk.ApplicationWindow):
     neustart      = Gtk.Template.Child()
     quadranten1   = Gtk.Template.Child()
     quadranten2   = Gtk.Template.Child()
-    menuKnopf     = Gtk.Template.Child()
+    #menuKnopf     = Gtk.Template.Child()
     speichern     = Gtk.Template.Child()
+    #menuTasteKurz = Gtk.Template.Child()
+    infoKnopf     = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

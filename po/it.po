@@ -26,7 +26,7 @@ msgstr ""
 
 #: src/window.ui:32
 msgid "Info zu funkcio"
-msgstr "Informazioni su funkcio"
+msgstr "Informazioni su Funkcio"
 
 #: src/window.ui:115
 msgid "1. Quadrant"

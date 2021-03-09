@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/im/bernard/funkcio">
     <file>window.ui</file>
+    <file>shortcuts.ui</file>
 
     <!-- bildsimboloj por la variaj funkcioj -->
     <file>icons/axes-four-quadrants-symbolic.svg</file>
@@ -13,6 +14,7 @@
     <file>icons/function-third-order-symbolic.svg</file>
     <file>icons/im.bernard.funkcio-symbolic.svg</file>
     <file>icons/im.bernard.funkcio.svg</file>
+
   </gresource>
 </gresources>
 

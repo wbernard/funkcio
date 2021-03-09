@@ -2,44 +2,6 @@
 <!-- Generated with glade 3.38.2 -->
 <interface domain="funkcio">
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkPopover" id="menu_popover">
-    <property name="can-focus">False</property>
-    <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">10</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkSeparator">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-top">6</property>
-            <property name="margin-bottom">6</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkModelButton"  id="menuKnopfInfo">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="action-name">app.about</property>
-            <property name="text" translatable="yes">Infos zu funkcio</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-  </object>
   <template class="Main_Window" parent="GtkApplicationWindow">
     <property name="can-focus">False</property>
     <property name="default-width">900</property>
@@ -156,17 +118,17 @@
           </object>
         </child>
         <child>
-          <object class="GtkMenuButton" id="menuKnopf">
+          <object class="GtkButton" id="infoKnopf">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="receives-default">False</property>
-            <property name="valign">center</property>
-            <property name="popover">menu_popover</property>
+            <property name="action-name">app.about</property>
+            <property name="tooltip-text" translatable="yes">Info</property>
             <child>
-              <object class="GtkImage" id="menubutton">
+              <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="icon-name">open-menu-symbolic</property>
+                <property name="icon-name">help-about-symbolic</property>
               </object>
             </child>
           </object>
@@ -240,7 +202,7 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Speichern</property>
+            <property name="tooltip-text" translatable="yes">Speichern als png</property>
             <signal name="clicked" handler="saveImage" swapped="no"/>
             <child>
               <object class="GtkImage">

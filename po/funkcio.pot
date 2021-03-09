@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: funkcio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-06 18:16+0100\n"
+"POT-Creation-Date: 2021-03-08 11:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,43 +22,47 @@ msgstr ""
 msgid "funkcio"
 msgstr ""
 
-#: src/window.ui:32
-msgid "Info zu funkcio"
+#: src/window.ui:19
+msgid "Tastenkürzel"
 msgstr ""
 
-#: src/window.ui:115
+#: src/window.ui:41
+msgid "Infos zu Funkcio"
+msgstr ""
+
+#: src/window.ui:124
 msgid "1. Quadrant"
 msgstr ""
 
-#: src/window.ui:136
+#: src/window.ui:145
 msgid "vier Quadranten"
 msgstr ""
 
-#: src/window.ui:183
+#: src/window.ui:192
 msgid "Reset"
 msgstr ""
 
-#: src/window.ui:204
+#: src/window.ui:213
 msgid "Gerade"
 msgstr ""
 
-#: src/window.ui:224
+#: src/window.ui:233
 msgid "Parabel vertikal"
 msgstr ""
 
-#: src/window.ui:243
-msgid "Speichern"
+#: src/window.ui:252
+msgid "Speichern als png"
 msgstr ""
 
-#: src/window.ui:263
+#: src/window.ui:272
 msgid "Kurve 3.Grad vertikal"
 msgstr ""
 
-#: src/window.ui:282
+#: src/window.ui:291
 msgid "Parabel horizontal"
 msgstr ""
 
-#: src/window.ui:301
+#: src/window.ui:310
 msgid "Kurve 3.Grad horizontal"
 msgstr ""
 

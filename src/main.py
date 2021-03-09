@@ -27,6 +27,7 @@ import numpy as np
 
 import sys
 import gi
+import signal
 
 gi.require_version('Gtk', '3.0')
 
@@ -48,13 +49,16 @@ class Application(Gtk.Application):
             self.win = Main_Window(application=self)
         self.win.present()
 
-        self.AktionMenu()
+        self.aktionMenu()
 
 
-    def AktionMenu(self):
+    def aktionMenu(self):
         infoAktion = Gio.SimpleAction.new("about", None)
         infoAktion.connect("activate", self.beiInfoKlick)
         self.add_action(infoAktion)
+        tastAktion = Gio.SimpleAction.new("shortcuts", None)
+        tastAktion.connect("activate", self.kurzTastKlick)
+        self.add_action(tastAktion)
 
 
     def beiInfoKlick(self, action, widget):
@@ -72,6 +76,39 @@ class Application(Gtk.Application):
 
         infoDialog.run()
         infoDialog.destroy()
+
+    def kurzTastKlick(self, action, widget):
+        self.builder = Gtk.Builder()
+        self.builder.add_from_resource("/im/bernard/funkcio/shortcuts.ui")
+        shortcuts = self.builder.get_object("shortcuts_overview")
+        print(shortcuts)
+        if self.win is not NotImplemented:
+           shortcuts.set_transient_for(self.win)
+        shortcuts.show()
+
+        #self.quit = Gtk.main_quit()
+        self.accelerator = Gtk.AccelGroup()
+        self.win.add_accel_group(self.accelerator)
+        #self.entry = self.builder.get_object("entry1")
+        self.add_accelerator("activate", "entry1", "<Control>q")
+
+        print ("pinker")
+
+    '''
+    def add_accelerator(self):
+        self.application.set_accels_for_action('win.quit', ['<Control>q'])
+        self.application.set_accels_for_action('win.save', ['<Control>s'])
+
+
+    def add_actions(self):
+        quit_action = Gio.SimpleAction.new('quit', None)
+        quit_action.connect('activate', self.quit)
+        self.application.add_action(quit_action)
+
+        save_action = Gio.SimpleAction.new('save', None)
+        save_action.connect('activate', self.win.saveImage)
+        self.application.add_action(save_action)'''
+
 
 
 def main(version):
