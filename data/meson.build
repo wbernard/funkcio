@@ -1,6 +1,6 @@
 desktop_file = i18n.merge_file(
-  input: 'im.bernard.funkcio.desktop.in',
-  output: 'im.bernard.funkcio.desktop',
+  input: 'im.bernard.Funkcio.desktop.in',
+  output: 'im.bernard.Funkcio.desktop',
   type: 'desktop',
   po_dir: '../po',
   install: true,
@@ -15,8 +15,8 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-  input: 'im.bernard.funkcio.appdata.xml.in',
-  output: 'im.bernard.funkcio.appdata.xml',
+  input: 'im.bernard.Funkcio.appdata.xml.in',
+  output: 'im.bernard.Funkcio.appdata.xml',
   po_dir: '../po',
   install: true,
   install_dir: join_paths(get_option('datadir'), 'appdata')
@@ -29,7 +29,7 @@ if appstream_util.found()
   )
 endif
 
-install_data('im.bernard.funkcio.gschema.xml',
+install_data('im.bernard.Funkcio.gschema.xml',
   install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
 )
 

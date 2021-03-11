@@ -1,6 +1,6 @@
-data/im.bernard.funkcio.desktop.in
-data/im.bernard.funkcio.appdata.xml.in
-data/im.bernard.funkcio.gschema.xml
+data/im.bernard.Funkcio.desktop.in
+data/im.bernard.Funkcio.appdata.xml.in
+data/im.bernard.Funkcio.gschema.xml
 src/window.ui
 src/main.py
 src/window.py

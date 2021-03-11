@@ -40,7 +40,7 @@ from .window import Main_Window
 
 class Application(Gtk.Application):
     def __init__(self):
-        super().__init__(application_id='im.bernard.funkcio',
+        super().__init__(application_id='im.bernard.Funkcio',
                          flags=Gio.ApplicationFlags.FLAGS_NONE)
 
     def do_activate(self):
@@ -61,7 +61,7 @@ class Application(Gtk.Application):
 
     def beiInfoKlick(self, action, widget):
         infoDialog = Gtk.AboutDialog()
-        infoDialog.set_logo_icon_name("im.bernard.funkcio")
+        infoDialog.set_logo_icon_name("im.bernard.Funkcio")
         infoDialog.set_destroy_with_parent(True)
         infoDialog.set_name("Funkcio")
         infoDialog.set_version("0.1")
