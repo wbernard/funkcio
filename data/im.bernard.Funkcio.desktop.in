@@ -1,7 +1,8 @@
 [Desktop Entry]
 Name=funkcio
 Exec=funkcio
+Icon=im.bernard.Funkcio
 Terminal=false
 Type=Application
-Categories=GTK;
+Categories=Utility;Education;Science;GNOME;GTK;
 StartupNotify=true
