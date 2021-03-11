@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Gtranslator 3.38.0\n"
 
 #. TRANSLATORS: Don't translate this text
-#: data/im.bernard.funkcio.desktop.in:3
+#: data/im.bernard.Funkcio.desktop.in:3
 msgid "funkcio"
 msgstr ""
 

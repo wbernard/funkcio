@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/im/bernard/funkcio">
+  <gresource prefix="/im/bernard/Funkcio">
     <file>window.ui</file>
 
     <!-- bildsimboloj por la variaj funkcioj -->
@@ -12,8 +12,8 @@
     <file>icons/function-third-order-horizontal-symbolic.svg</file>
     <file>icons/function-third-order-symbolic.svg</file>
     <file>icons/info-symbolic.svg</file>
-    <file>icons/im.bernard.funkcio-symbolic.svg</file>
-    <file>icons/im.bernard.funkcio.svg</file>
+    <file>icons/im.bernard.Funkcio-symbolic.svg</file>
+    <file>icons/im.bernard.Funkcio.svg</file>
 
   </gresource>
 </gresources>
