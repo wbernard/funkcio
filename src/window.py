@@ -76,7 +76,6 @@ class Main_Window(Gtk.ApplicationWindow):
         self.neustart.connect('clicked', self.neuStart)
         self.quadranten1.connect('clicked', self.einVierQuad, "1")
         self.quadranten2.connect('clicked', self.einVierQuad, "2")
-        self.speichern.connect('clicked', self.saveImage)
 
         self.linfarb     = [[0.1,0.37,0.71], [0.38,0.21,0.51],[0.15,0.64,0.41], [0.65,0.11,0.18], [0.39,0.27,0.17]]
         self.zeichneneu  = True
@@ -515,11 +514,6 @@ class Main_Window(Gtk.ApplicationWindow):
         self.messageLabel.set_markup(markup)
         self.messageWidget.popup()
         self.hideMessageTimed(4)
-
-    def saveImage(self,widget):   # speichert mit datum und Uhrzeit in den home-Ordner
-        now = datetime.datetime.now()
-        name = now.strftime("%m-%d-%Y %H:%M:%S")
-        self.surface.write_to_png(name + '.png')
 
     def letzteFunktion(self, widget):
         self.ende = True

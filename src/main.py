@@ -55,6 +55,9 @@ class Application(Gtk.Application):
         infoAktion = Gio.SimpleAction.new("about", None)
         infoAktion.connect("activate", self.beiInfoKlick)
         self.add_action(infoAktion)
+        speicherAktion = Gio.SimpleAction.new("save", None)
+        speicherAktion.connect("activate", self.beiSpeicherKlick)
+        self.add_action(speicherAktion)
 
     def beiInfoKlick(self, action, widget):
         infoDialog = Gtk.AboutDialog()
@@ -71,6 +74,23 @@ class Application(Gtk.Application):
 
         infoDialog.run()
         infoDialog.destroy()
+
+    def beiSpeicherKlick(self, action, widget):
+        dateiWahl = Gtk.FileChooserNative.new(_("Speichere Bild als png"), self.win, Gtk.FileChooserAction.SAVE, _("Speichern"), _("Abbrechen"))
+        bilderOrdner = GLib.get_user_special_dir(GLib.USER_DIRECTORY_PICTURES)
+
+        vorgabeName = str(_("Untitled") + '.png')
+        dateiWahl.set_current_name(vorgabeName)
+
+        response = dateiWahl.run()
+        if response == Gtk.ResponseType.ACCEPT:
+            dateiPfad = dateiWahl.get_filename()
+        else:
+            dateiPfad = None
+        dateiWahl.destroy()
+
+        if dateiPfad != None:
+            self.win.surface.write_to_png(dateiPfad)
 
 def main(version):
     app = Application()
