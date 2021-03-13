@@ -21,7 +21,7 @@
     </provides>
     <screenshots>
         <screenshot type="default">
-            <image height="952" width="699">https://github.com/wbernard/funkcio/raw/main/data/screenshots/screenshot.png</image>
+            <image height="699" width="952">https://github.com/wbernard/funkcio/raw/main/data/screenshots/screenshot.png</image>
             <caption>App Window</caption>
         </screenshot>
     </screenshots>
