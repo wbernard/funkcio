@@ -58,6 +58,9 @@ class Main_Window(Gtk.ApplicationWindow):
     quadranten2   = Gtk.Template.Child()
     speichern     = Gtk.Template.Child()
     infoKnopf     = Gtk.Template.Child()
+    zoomEin       = Gtk.Template.Child()
+    zoomAus       = Gtk.Template.Child()
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -76,6 +79,8 @@ class Main_Window(Gtk.ApplicationWindow):
         self.neustart.connect('clicked', self.neuStart)
         self.quadranten1.connect('clicked', self.einVierQuad, "1")
         self.quadranten2.connect('clicked', self.einVierQuad, "2")
+        self.zoomEin.connect('clicked', self.beiZoomEin)
+        self.zoomAus.connect('clicked', self.beiZoomAus)
 
         self.linfarb     = [[0.1,0.37,0.71], [0.38,0.21,0.51],[0.15,0.64,0.41], [0.65,0.11,0.18], [0.39,0.27,0.17]]
         self.zeichneneu  = True
@@ -92,6 +97,7 @@ class Main_Window(Gtk.ApplicationWindow):
 
         self.quadranten1.set_active(True)
         self.quadranten2.set_active(False)
+        self.zoomFaktor = 1
 
         self.success    = "#88cc27"
         self.warning    = "#00008b"
@@ -125,6 +131,17 @@ class Main_Window(Gtk.ApplicationWindow):
             self.onDraw(self.drawArea, self.cr)
             self.drawArea.queue_draw()
 
+    def beiZoomEin(self, widget):
+        self.zoomFaktor = self.zoomFaktor*2
+        self.zeichneneu    = True
+        self.onDraw(self.drawArea, self.cr)
+        self.drawArea.queue_draw()
+
+    def beiZoomAus(self, widget):
+        self.zoomFaktor = self.zoomFaktor/2
+        self.zeichneneu    = True
+        self.onDraw(self.drawArea, self.cr)
+        self.drawArea.queue_draw()
 
     def onConfigure(self, area, eve, data = None): # wird bei Änderung des Fensters aufgerufen
         ab = area.get_allocated_width()   #liest die aktuellen Abmessungen des Fensters ein
@@ -170,7 +187,8 @@ class Main_Window(Gtk.ApplicationWindow):
         if self.surface is not None:
             cr.set_source_surface(self.surface, 0.0, 0.0)
             cr.paint()
-            global sb, sh
+            global sb, sh, zf
+            zf = self.zoomFaktor            #Zoomfaktor wird global definiert
             sb = self.surface.get_width()   # Breite der Zeichenebene
             sh = self.surface.get_height()  # Höhe der Zeichenebene
 
@@ -194,14 +212,13 @@ class Main_Window(Gtk.ApplicationWindow):
                 self.cr.fill()
 
                 self.zeichneAchsen(pva, pha)
-
                 #print ("Punkte", self.punkte[:])
 
-                for p in self.punkte:
-                    x1 = p[0] + pva
+                for p in self.punkte:   # punkte sind die eingegebenen Punkte
+
+                    x1 = p[0] + pva      # x1 und y1 sind die Punkte im absoluten System
                     y1 = -p[1] + pha
                     #print ("pva =", pva, "pha =", pha)
-                    #print ("Punkt", p, x1, y1)
                     self.zeichnePunkt(x1, y1, pva, pha)
 
                 if self.typ != 0:
@@ -216,7 +233,6 @@ class Main_Window(Gtk.ApplicationWindow):
                     pass
 
                 #self.drawArea.queue_draw()
-
                 self.zeichneneu = False
 
         else:
@@ -231,20 +247,23 @@ class Main_Window(Gtk.ApplicationWindow):
             #global pva, pha         # Position der vertikalen/horizontalen Achse
             pva = sb/self.quadra
             pha = sh - sh/self.quadra
-            x = int(x1-pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
-            y = int(-y1+pha)
+            x = int((x1-pva)/zf)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
+            y = int((-y1+pha)/zf)
 
             koord = "  x  " + str(x) + ", y  " + str(y)
             self.textAusgabe.set_text(koord)
+            #self.cr.move_to(150, sh-40)
+            #self.cr.set_font_size(16)
+            #self.cr.show_text(koord)
         else:
             self.displayMessage(self.error, "Da ist etwas faul!")
 
     def holePunkt(self, area, eve):
-        x1 = eve.x
-        y1 = eve.y
+        x1 = eve.x-(zf-1)*(eve.x-pva)/zf
+        y1 = eve.y+(zf-1)*(pha-eve.y)/zf
 
-        x = int(x1- pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
-        y = int(-y1+pha)
+        x = int((x1- pva))         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
+        y = int((-y1+pha))
         #print("(" + str(x) + ", " + str(y) + ")")
 
         self.zeichnePunkt(x1,y1,pva,pha)
@@ -256,7 +275,7 @@ class Main_Window(Gtk.ApplicationWindow):
         self.linio(0, pha, sb, pha, 1.8) # zeichnet die horizontale Achse
         self.linio(pva, 0, pva, sh, 1.8)
         aa = 0
-        rw = 50
+        rw = 50*zf              # Rasterweite
         while (aa < sh):
             aa = aa + rw
             self.linio(0, pha+aa, sb, pha+aa, 0.2) # zeichnet horizontale Rasterlinien
@@ -277,12 +296,12 @@ class Main_Window(Gtk.ApplicationWindow):
 
         self.zeichneAchsen(pva, pha)
 
-        #self.textAusgabe1.set_text("")
         self.drawArea.queue_draw()
 
         del self.punkte[:]
         #self.quadra = 8
         self.typ = 0
+        self.zoomFaktor = 1
 
 
     def zeichnePunkt(self,x1,y1,pva,pha):
@@ -291,16 +310,19 @@ class Main_Window(Gtk.ApplicationWindow):
         self.cr.set_line_width(self.crDicke)
         self.cr.set_line_cap(1) # Linienende 0 = BUTT, 1 = rund  2 = eckig
 
-        self.cr.arc(x1, y1, 3, 0, 2*math.pi)
+        px = pva+(x1-pva)*zf
+        py = pha-(pha-y1)*zf
+        self.cr.arc(px, py, 3, 0, 2*math.pi)
         self.cr.fill()
 
         self.cr.set_source_rgba(0, 0, 0, 1)
         self.cr.select_font_face("sans-serif", cairo.FONT_SLANT_NORMAL,
                 cairo.FONT_WEIGHT_NORMAL)
-        self.cr.move_to(x1+5, y1)
+        self.cr.move_to(px+5, py)
         self.cr.set_font_size(12)
-        x = int(x1 - pva)         # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
-        y = int(-y1 + pha)
+
+        x = int((x1- pva))      # x und y sind die Koordinaten im Aschsenkreuz der Zeichenebene
+        y = int((-y1+pha))
         self.cr.show_text(str(x) + ", " + str(y))
 
         #self.drawArea.queue_draw()
@@ -337,13 +359,14 @@ class Main_Window(Gtk.ApplicationWindow):
             af = fit[0]
             bf = fit[1]
 
-            x = -sb
-            punkt = []      # hier geht es um die einzelnen Punkte der Kurve
-            while x < sb:
+            x = -sb/zf
+            punkt = []          # hier geht es um die einzelnen Punkte der Kurve
+            while x < sb/zf:
                 y = af*x + bf   # Geradengleichnung y = a*x + b
-                punkt.append((x+ pva, -y + pha))
+                punkt.append((zf*x+ pva, -y*zf + pha))
                 x += 1
 
+            #print (punkt)
             self.zeichneFunktion(punkt)
 
             a = round(af,3)
@@ -355,11 +378,11 @@ class Main_Window(Gtk.ApplicationWindow):
             bf = fit[1]
             cf = fit[2]
 
-            x = -sb
+            x = -sb/zf
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
-            while x < sb:
+            while x < sb/zf:
                 y = af*x**2 + bf*x + cf   # Gleichung der Parabel
-                punkt.append((x+ pva, -y + pha))
+                punkt.append((zf*x+ pva, -y*zf + pha))
                 x += 1
 
             self.zeichneFunktion(punkt)
@@ -370,17 +393,17 @@ class Main_Window(Gtk.ApplicationWindow):
 
             formel = "y = " + "{:+}".format(a) + "x²  " + "{:+}".format(b)+ "x  " + "{:+}".format(c)
 
-        elif self.typ == 3:   # 3. Grades vertikal
+        elif self.typ == 3:     # 3. Grades vertikal
             af = fit[0]
             bf = fit[1]
             cf = fit[2]
             df = fit[3]
 
-            x = -sb
-            punkt = []      # hier geht es um die einzelnen Punkte der Kurve
-            while x < sb:
+            x = -sb/zf
+            punkt = []          # hier geht es um die einzelnen Punkte der Kurve
+            while x < sb/zf:
                 y = af*x**3 + bf*x**2 + cf*x + df  # Gleichung der Funkion 3.Grades
-                punkt.append((x+ pva, -y + pha))
+                punkt.append((zf*x+ pva, -y*zf + pha))
                 x += 1
 
             self.zeichneFunktion(punkt)
@@ -397,11 +420,11 @@ class Main_Window(Gtk.ApplicationWindow):
             bf = fit[1]
             cf = fit[2]
 
-            x = -sb
+            x = -sb/zf
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
-            while x < sb:
+            while x < sb/zf:
                 y = af*x**2 + bf*x + cf   # Gleichung der horizontalen Parabel
-                punkt.append((y+ pva, -x + pha))
+                punkt.append((zf*y+ pva, -x*zf + pha))
                 x += 1
 
             self.zeichneFunktion(punkt)
@@ -418,11 +441,11 @@ class Main_Window(Gtk.ApplicationWindow):
             cf = fit[2]
             df = fit[3]
 
-            x = -sb
+            x = -sb/zf
             punkt = []      # hier geht es um die einzelnen Punkte der Kurve
-            while x < sb:
+            while x < sb/zf:
                 y = af*x**3 + bf*x**2 + cf*x + df  # Gleichung der Funkion 3.Grades
-                punkt.append((y+ pva, -x + pha))
+                punkt.append((zf*y+ pva, -x*zf + pha))
                 x += 1
 
             self.zeichneFunktion(punkt)
@@ -439,6 +462,9 @@ class Main_Window(Gtk.ApplicationWindow):
 
 
     def zeichneFunktion(self,punkt):
+
+        #for p in punkt[1:]:
+
 
         self.cr.move_to(*punkt[0])
         for p in punkt[1:]:
@@ -519,7 +545,6 @@ class Main_Window(Gtk.ApplicationWindow):
         self.ende = True
         self.zeichneneu = True
         self.onDraw(self.drawArea, self.cr)
-
 
     @threaded
     def hideMessageTimed(self,t):
