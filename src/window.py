@@ -132,13 +132,13 @@ class Main_Window(Gtk.ApplicationWindow):
             self.drawArea.queue_draw()
 
     def beiZoomEin(self, widget):
-        self.zoomFaktor = self.zoomFaktor+0.25
+        self.zoomFaktor = self.zoomFaktor/0.8
         self.zeichneneu    = True
         self.onDraw(self.drawArea, self.cr)
         self.drawArea.queue_draw()
 
     def beiZoomAus(self, widget):
-        self.zoomFaktor = self.zoomFaktor-0.25
+        self.zoomFaktor = self.zoomFaktor*0.8
         self.zeichneneu    = True
         self.onDraw(self.drawArea, self.cr)
         self.drawArea.queue_draw()
