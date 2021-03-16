@@ -132,13 +132,13 @@ class Main_Window(Gtk.ApplicationWindow):
             self.drawArea.queue_draw()
 
     def beiZoomEin(self, widget):
-        self.zoomFaktor = self.zoomFaktor*2
+        self.zoomFaktor = self.zoomFaktor+0.25
         self.zeichneneu    = True
         self.onDraw(self.drawArea, self.cr)
         self.drawArea.queue_draw()
 
     def beiZoomAus(self, widget):
-        self.zoomFaktor = self.zoomFaktor/2
+        self.zoomFaktor = self.zoomFaktor-0.25
         self.zeichneneu    = True
         self.onDraw(self.drawArea, self.cr)
         self.drawArea.queue_draw()
@@ -207,11 +207,7 @@ class Main_Window(Gtk.ApplicationWindow):
                 else:
                     pass
 
-                self.cr.rectangle(0, 0, sb, sh)  # x, y, width, height
-                self.cr.set_operator(0);
-                self.cr.fill()
-
-                self.zeichneAchsen(pva, pha)
+                self.zeichneAchsen(pva, pha, zf)
                 #print ("Punkte", self.punkte[:])
 
                 for p in self.punkte:   # punkte sind die eingegebenen Punkte
@@ -270,10 +266,14 @@ class Main_Window(Gtk.ApplicationWindow):
 
         self.drawArea.queue_draw()
 
-    def zeichneAchsen(self, pva, pha):
+    def zeichneAchsen(self, pva, pha, zf):
+        self.cr.rectangle(0, 0, sb, sh)  # x, y, width, height
+        self.cr.set_operator(0);
+        self.cr.fill()
         self.cr.set_operator(1)
         self.linio(0, pha, sb, pha, 1.8) # zeichnet die horizontale Achse
         self.linio(pva, 0, pva, sh, 1.8)
+
         aa = 0
         rw = 50*zf              # Rasterweite
         while (aa < sh):
@@ -288,21 +288,15 @@ class Main_Window(Gtk.ApplicationWindow):
 
     def neuStart(self, widget):
 
-        sb = self.surface.get_width()
-        sh = self.surface.get_height()
-        self.cr.rectangle(0, 0, sb, sh)  # x, y, width, height
-        self.cr.set_operator(0);
-        self.cr.fill()
-
-        self.zeichneAchsen(pva, pha)
-
+        self.zoomFaktor = 1
+        zf = self.zoomFaktor
+        self.ende = False
+        self.zeichneAchsen(pva, pha, zf)
         self.drawArea.queue_draw()
 
         del self.punkte[:]
         #self.quadra = 8
         self.typ = 0
-        self.zoomFaktor = 1
-
 
     def zeichnePunkt(self,x1,y1,pva,pha):
         rgba = self.crFarbe
