@@ -28,7 +28,7 @@
     <releases>
         <release version="0.2" date="2021-03-17">
             <description>
-                <p>Add canvas zoom</p>
+                <p>Add canvas zoom, grid refinements</p>
             </description>
         </release>
         <release version="0.1" date="2021-03-11">

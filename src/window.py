@@ -97,7 +97,7 @@ class Main_Window(Gtk.ApplicationWindow):
 
         self.quadranten1.set_active(True)
         self.quadranten2.set_active(False)
-        self.zoomFaktor = 1
+        self.zoomFaktor = 0.5
 
         self.success    = "#88cc27"
         self.warning    = "#00008b"
@@ -275,7 +275,7 @@ class Main_Window(Gtk.ApplicationWindow):
         self.linio(pva, 0, pva, sh, 1.8)
 
         aa = 0
-        rw = 50*zf              # Rasterweite
+        rw = 100*zf              # Rasterweite
         while (aa < sh):
             aa = aa + rw
             self.linio(0, pha+aa, sb, pha+aa, 0.2) # zeichnet horizontale Rasterlinien
@@ -288,7 +288,7 @@ class Main_Window(Gtk.ApplicationWindow):
 
     def neuStart(self, widget):
 
-        self.zoomFaktor = 1
+        self.zoomFaktor = 0.5
         zf = self.zoomFaktor
         self.ende = False
         self.zeichneAchsen(pva, pha, zf)
