@@ -472,7 +472,11 @@ class Main_Window(Gtk.ApplicationWindow):
 
     def zeichneGerade(self, widget):
         self.typ = 1
-        print (_("Gerade "), len(self.punkte), _("Punkte"))
+        print(
+            ngettext(
+                "Gerade {num} Punkt", "Gerade {num} Punkte", len(self.punkte)
+            ).format(num=len(self.punkte))
+        )
         if  len(self.punkte) < 2:
             self.displayMessage(self.success, _("Mindestens zwei Punkte!"))
         elif len(self.punkte) >= 2:
@@ -481,7 +485,11 @@ class Main_Window(Gtk.ApplicationWindow):
 
     def zeichneParabel(self, widget):
         self.typ = 2
-        print (_("Parabel "), len(self.punkte), _("Punkte"))
+        print(
+            ngettext(
+                "Parabel {num} Punkt", "Parabel {num} Punkte", len(self.punkte)
+            ).format(num=len(self.punkte))
+        )
         if len(self.punkte) < 3:
             self.displayMessage(self.success, _("Mindestens drei Punkte!"))
         elif len(self.punkte) >= 3:
@@ -490,7 +498,13 @@ class Main_Window(Gtk.ApplicationWindow):
 
     def zeichneKurve3_O(self, widget):
         self.typ = 3
-        print (_("Kurve 3.Grad "), len(self.punkte), _("Punkte"))
+        print(
+            ngettext(
+                "Kurve 3.Grad {num} Punkt",
+                "Kurve 3.Grad {num} Punkte",
+                len(self.punkte),
+            ).format(num=len(self.punkte))
+        )
         if len(self.punkte) < 4:
             self.displayMessage(self.success, _("Mindestens vier Punkte!"))
         elif len(self.punkte) >= 4:
@@ -499,7 +513,13 @@ class Main_Window(Gtk.ApplicationWindow):
 
     def zeichneParabelHor(self, widget):
         self.typ = 4
-        print (_("Parabel horizontal "), len(self.punkte), _("Punkte"))
+        print(
+            ngettext(
+                "Parabel horizontal {num} Punkt",
+                "Parabel horizontal {num} Punkte",
+                len(self.punkte),
+            ).format(num=len(self.punkte))
+        )
         if len(self.punkte) < 3:
             self.displayMessage(self.success, _("Mindestens drei Punkte!"))
         elif len(self.punkte) >= 3:
@@ -508,7 +528,13 @@ class Main_Window(Gtk.ApplicationWindow):
 
     def zeichneKurve3_OHor(self, widget):
         self.typ = 5
-        print (_("Kurve 3.Grad horizontal "), len(self.punkte), _("Punkte"))
+        print(
+            ngettext(
+                "Kurve 3.Grad horizontal {num} Punkt",
+                "Kurve 3.Grad horizontal {num} Punkte",
+                len(self.punkte),
+            ).format(num=len(self.punkte))
+        )
         if len(self.punkte) < 4:
             self.displayMessage(self.success, _("Mindestens vier Punkte!"))
         elif len(self.punkte) >= 4:
