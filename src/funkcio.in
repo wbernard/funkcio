@@ -21,14 +21,25 @@ import os
 import sys
 import signal
 import gettext
+import locale
 
+GETTEXT_PACKAGE = 'funkcio'
 VERSION = '@VERSION@'
 pkgdatadir = '@pkgdatadir@'
 localedir = '@localedir@'
 
 sys.path.insert(1, pkgdatadir)
 signal.signal(signal.SIGINT, signal.SIG_DFL)
-gettext.install('funkcio', localedir)
+
+gettext.install(GETTEXT_PACKAGE, localedir, names=['ngettext'])
+
+# We need to setup the locale at the C-level for strings in GtkBuilder to
+# be translated at runtime
+locale.setlocale(locale.LC_ALL, '')
+locale.bindtextdomain(GETTEXT_PACKAGE, localedir)
+locale.bind_textdomain_codeset(GETTEXT_PACKAGE, 'UTF-8')
+locale.textdomain(GETTEXT_PACKAGE)
+
 
 if __name__ == '__main__':
     import gi
