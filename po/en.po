@@ -1,0 +1,114 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the funkcio package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# walter <mail@mail.com>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: funkcio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-06 18:16+0100\n"
+"PO-Revision-Date: 2021-03-06 18:42+0100\n"
+"Last-Translator: Gustavo Peredo <gustavomperedo@protonmail.com>\n"
+"Language-Team: English <ital@mail.com>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: Gtranslator 3.38.0\n"
+
+#. TRANSLATORS: Don't translate this text
+#: data/im.bernard.Funkcio.desktop.in:3
+msgid "funkcio"
+msgstr ""
+
+#: src/window.ui:32
+msgid "Info zu funkcio"
+msgstr "About Funkcio"
+
+#: src/window.ui:115
+msgid "1. Quadrant"
+msgstr "1. Quadrant"
+
+#: src/window.ui:136
+msgid "vier Quadranten"
+msgstr "Four Quadrants"
+
+#: src/window.ui:183
+msgid "Reset"
+msgstr "Reset"
+
+#: src/window.ui:204
+msgid "Gerade"
+msgstr "Straight"
+
+#: src/window.ui:224
+msgid "Parabel vertikal"
+msgstr "Vertical parable"
+
+#: src/window.ui:243
+msgid "Speichern"
+msgstr "Save"
+
+#: src/window.ui:263
+msgid "Kurve 3.Grad vertikal"
+msgstr "3rd degree vertical curve"
+
+#: src/window.ui:282
+msgid "Parabel horizontal"
+msgstr "Horizontal parable"
+
+#: src/window.ui:301
+msgid "Kurve 3.Grad horizontal"
+msgstr "3rd degree horizontal curve"
+
+#: src/window.py:189
+msgid ""
+"Klicke auf eine beliebige Anzahl Punkte im Koordinatensystem \n"
+" und wähle dann die gewünschte Funktion!"
+msgstr ""
+"Click at least in two points in the cartesian plane \n"
+"and select the function you wish to plot!"
+
+#: src/window.py:215
+msgid "Gleichung:"
+msgstr "Equation:"
+
+#: src/window.py:446
+msgid "Gerade "
+msgstr "Straight"
+
+#: src/window.py:446 src/window.py:455 src/window.py:464 src/window.py:473
+#: src/window.py:482
+msgid "Punkte"
+msgstr "Points"
+
+#: src/window.py:448
+msgid "Mindestens zwei Punkte!"
+msgstr "At least two points!"
+
+#: src/window.py:455
+msgid "Parabel "
+msgstr "Parable"
+
+#: src/window.py:457 src/window.py:475
+msgid "Mindestens drei Punkte!"
+msgstr "At least three points!!"
+
+#: src/window.py:464
+msgid "Kurve 3.Grad "
+msgstr "3rd degree curve"
+
+#: src/window.py:466 src/window.py:484
+msgid "Mindestens vier Punkte!"
+msgstr "At least four points!"
+
+#: src/window.py:473
+msgid "Parabel horizontal "
+msgstr "Horizontal parable"
+
+#: src/window.py:482
+msgid "Kurve 3.Grad horizontal "
+msgstr "3rd degree horizontal curve"
