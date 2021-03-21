@@ -1,0 +1,172 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the funkcio package.
+# Zander Brown <zbrown@gnome.org>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: funkcio\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-20 23:46+0000\n"
+"PO-Revision-Date: 2021-03-20 23:34+0000\n"
+"Last-Translator: Zander Brown <zbrown@gnome.org>\n"
+"Language-Team: English - United Kingdom <en_GB@li.org>\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 3.38.0\n"
+
+#: data/im.bernard.Funkcio.desktop.in:3
+msgid "funkcio"
+msgstr "funkcio"
+
+#: data/im.bernard.Funkcio.appdata.xml.in:8
+msgid "Funkcio"
+msgstr "Funkcio"
+
+#: data/im.bernard.Funkcio.appdata.xml.in:9
+msgid "Draw functions from points"
+msgstr "Draw functions from points"
+
+#: data/im.bernard.Funkcio.appdata.xml.in:11
+msgid "Define a few points and get mathematical functions that connect them."
+msgstr "Define a few points and get mathematical functions that connect them."
+
+#: data/im.bernard.Funkcio.appdata.xml.in:25
+msgid "App Window"
+msgstr "App Window"
+
+#: data/im.bernard.Funkcio.appdata.xml.in:31
+msgid "Add canvas zoom, grid refinements"
+msgstr "Add canvas zoom, grid refinements"
+
+#: data/im.bernard.Funkcio.appdata.xml.in:36
+msgid "Initial release."
+msgstr "Initial release."
+
+#: data/im.bernard.Funkcio.appdata.xml.in:44
+msgid "Walter Bernard"
+msgstr "Walter Bernard"
+
+#: src/window.ui:77
+msgid "1. Quadrant"
+msgstr "Single Quadrant"
+
+#: src/window.ui:98
+msgid "vier Quadranten"
+msgstr "Four Quadrants"
+
+#: src/window.ui:125
+msgid "Info"
+msgstr "About Funkcio"
+
+#: src/window.ui:145
+msgid "Reset"
+msgstr "Reset"
+
+#: src/window.ui:166
+msgid "Speichern als png"
+msgstr "Export PNG…"
+
+#: src/window.ui:186
+msgid "Gerade"
+msgstr "Line"
+
+#: src/window.ui:210
+msgid "zoomAus"
+msgstr "Zoom Out"
+
+#: src/window.ui:230
+msgid "zoomEin"
+msgstr "Zoom In"
+
+#: src/window.ui:259
+msgid "Parabel vertikal"
+msgstr "Vertical Parabola"
+
+#: src/window.ui:278
+msgid "Kurve 3.Grad vertikal"
+msgstr "Vertical Third Order Polynomial"
+
+#: src/window.ui:297
+msgid "Parabel horizontal"
+msgstr "Horizontal Parabola"
+
+#: src/window.ui:316
+msgid "Kurve 3.Grad horizontal"
+msgstr "Horizontal Third Order Polynomial"
+
+#: src/main.py:79
+msgid "Speichere Bild als png"
+msgstr "Export as PNG"
+
+#: src/main.py:79
+msgid "Speichern"
+msgstr "Save"
+
+#: src/main.py:79
+msgid "Abbrechen"
+msgstr "Cancel"
+
+#: src/main.py:82
+msgid "Untitled"
+msgstr "Untitled"
+
+#: src/window.py:205
+msgid ""
+"Klicke auf eine beliebige Anzahl Punkte im Koordinatensystem \n"
+" und wähle dann die gewünschte Funktion!"
+msgstr "Place points on the plane and select a function"
+
+#: src/window.py:226
+msgid "Gleichung:"
+msgstr "Equation:"
+
+#: src/window.py:477
+#, python-brace-format
+msgid "Gerade {num} Punkt"
+msgid_plural "Gerade {num} Punkte"
+msgstr[0] "Single-point line"
+msgstr[1] "{num}-point line"
+
+#: src/window.py:481
+msgid "Mindestens zwei Punkte!"
+msgstr "Need at least two points"
+
+#: src/window.py:490
+#, python-brace-format
+msgid "Parabel {num} Punkt"
+msgid_plural "Parabel {num} Punkte"
+msgstr[0] "Single-point Parabola"
+msgstr[1] "{num}-point Parabola"
+
+#: src/window.py:494 src/window.py:524
+msgid "Mindestens drei Punkte!"
+msgstr "Need at least three points"
+
+#: src/window.py:503
+#, python-brace-format
+msgid "Kurve 3.Grad {num} Punkt"
+msgid_plural "Kurve 3.Grad {num} Punkte"
+msgstr[0] "Single-point Third Order Polynomial"
+msgstr[1] "{num}-point Third Order Polynomial"
+
+#: src/window.py:509 src/window.py:539
+msgid "Mindestens vier Punkte!"
+msgstr "Need at least four points"
+
+#: src/window.py:518
+#, python-brace-format
+msgid "Parabel horizontal {num} Punkt"
+msgid_plural "Parabel horizontal {num} Punkte"
+msgstr[0] "Single-point Horizontal Parabola"
+msgstr[1] "{num}-point Horizontal Parabola"
+
+#: src/window.py:533
+#, python-brace-format
+msgid "Kurve 3.Grad horizontal {num} Punkt"
+msgid_plural "Kurve 3.Grad horizontal {num} Punkte"
+msgstr[0] "Single-point Horizontal Third Order Polynomial"
+msgstr[1] "{num}-point Horizontal Third Order Polynomial"
