@@ -26,6 +26,11 @@
         </screenshot>
     </screenshots>
     <releases>
+        <release version="0.2.1" date="2021-03-29">
+            <description>
+                <p>Add Portuguese and British English translations.</p>
+            </description>
+        </release>
         <release version="0.2" date="2021-03-17">
             <description>
                 <p>Add canvas zoom, grid refinements</p>

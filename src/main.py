@@ -64,7 +64,7 @@ class Application(Gtk.Application):
         infoDialog.set_logo_icon_name("im.bernard.Funkcio")
         infoDialog.set_destroy_with_parent(True)
         infoDialog.set_name("Funkcio")
-        infoDialog.set_version("0.2")
+        infoDialog.set_version("0.2.1")
         infoDialog.set_authors(["Walter Bernard"])
         infoDialog.set_artists(["Tobias Bernard"])
         infoDialog.set_license_type(Gtk.License.GPL_3_0)
