@@ -326,6 +326,25 @@
             <property name="position">9</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkButton" id="exponential">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Exponentialkurve</property>
+            <signal name="clicked" handler="zeichneParabel" swapped="no"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">function-parable-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="position">10</property>
+          </packing>
+        </child>
       </object>
     </child>
   </template>

@@ -21,6 +21,7 @@ import cairo
 import math
 import os, threading, time, datetime
 import numpy as np
+from scipy.optimize import curve_fit
 
 # Gtk Imports
 
@@ -60,6 +61,7 @@ class Main_Window(Gtk.ApplicationWindow):
     infoKnopf     = Gtk.Template.Child()
     zoomEin       = Gtk.Template.Child()
     zoomAus       = Gtk.Template.Child()
+    exponential   = Gtk.Template.Child()
 
 
     def __init__(self, **kwargs):
@@ -81,8 +83,10 @@ class Main_Window(Gtk.ApplicationWindow):
         self.quadranten2.connect('clicked', self.einVierQuad, "2")
         self.zoomEin.connect('clicked', self.beiZoomEin)
         self.zoomAus.connect('clicked', self.beiZoomAus)
+        self.exponential.connect('clicked', self.zeichneExpoKurve)
 
-        self.linfarb     = [[0.1,0.37,0.71], [0.38,0.21,0.51],[0.15,0.64,0.41], [0.65,0.11,0.18], [0.39,0.27,0.17]]
+
+        self.linfarb     = [[0.1,0.37,0.71], [0.38,0.21,0.51],[0.15,0.64,0.41], [0.65,0.11,0.18], [0.39,0.27,0.17], [1, 0, 0.17], [0.39, 0, 1]]
         self.zeichneneu  = True
         self.quadra      = 8
         self.typ         = 0
@@ -332,9 +336,12 @@ class Main_Window(Gtk.ApplicationWindow):
         yp = []
         global formel
 
+        sortPunkte = sorted(self.punkte)
+        #print (sortPunkte)
+
         for i in range(n):
-            xp.append(self.punkte[i][0])
-            yp.append(self.punkte[i][1])
+            xp.append(sortPunkte[i][0])
+            yp.append(sortPunkte[i][1])
 
         xa = np.array(xp)   # Liste wird in Datenfeld (array) umgewandelt
         ya = np.array(yp)
@@ -451,6 +458,43 @@ class Main_Window(Gtk.ApplicationWindow):
 
             formel = "x = " + "{:+}".format(a) + "y³ " + "{:+}".format(b)+ "y² " + "{:+}".format(c)+ "y " + "{:+}".format(d)
 
+        elif self.typ == 7:
+
+            def func(xa, a, b, c):
+                return a*np.exp(b*0.01*xa)+c
+
+            k = (yp[n-1]-yp[0])/(xp[n-1]-xp[0])  # Steigung der Geraden zwischen erstem und letztem Punkt
+            difSum = 0
+            for i in range(1,n-1):
+                difSum = difSum + ((k*(xp[i]-xp[0])+yp[0]) - yp[i])
+
+            if (k >= 0 and difSum >= 0) or (k <= 0 and difSum <= 0):
+                erstVersuch =[200,1,10]
+            else:
+                erstVersuch =[-200,-1,-10]
+
+            popt, pcov = curve_fit(func, xa, ya, erstVersuch)
+            #print (popt)
+
+            a = popt[0]
+            b = popt[1]
+            c = popt[2]
+
+            x = -sb/zf
+            punkt = []      # hier geht es um die einzelnen Punkte der Kurve
+            while x < sb/zf:
+                y = a*np.exp(b*0.01*x)+c  # Gleichung der Exponentialfunktion
+                punkt.append((zf*x+ pva, -y*zf + pha))
+                x += 5
+
+            self.zeichneFunktion(punkt)
+
+            a = round(a,3)
+            b = round((0.01*b),6)
+            c = round(c,0)
+
+            formel = "y = " + "{:+}".format(a) + "*exp(" + "{:+}".format(b) + "*x) " + "{:+}".format(c)
+
         #self.textAusgabe1.set_text(formel)
         self.drawArea.queue_draw()
 
@@ -478,7 +522,7 @@ class Main_Window(Gtk.ApplicationWindow):
             ).format(num=len(self.punkte))
         )
         if  len(self.punkte) < 2:
-            self.displayMessage(self.success, _("Mindestens zwei Punkte!"))
+            self.displayMessage(self.warning, _("Mindestens zwei Punkte!"))
         elif len(self.punkte) >= 2:
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
@@ -491,7 +535,7 @@ class Main_Window(Gtk.ApplicationWindow):
             ).format(num=len(self.punkte))
         )
         if len(self.punkte) < 3:
-            self.displayMessage(self.success, _("Mindestens drei Punkte!"))
+            self.displayMessage(self.warning, _("Mindestens drei Punkte!"))
         elif len(self.punkte) >= 3:
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
@@ -506,7 +550,7 @@ class Main_Window(Gtk.ApplicationWindow):
             ).format(num=len(self.punkte))
         )
         if len(self.punkte) < 4:
-            self.displayMessage(self.success, _("Mindestens vier Punkte!"))
+            self.displayMessage(self.warning, _("Mindestens vier Punkte!"))
         elif len(self.punkte) >= 4:
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
@@ -521,7 +565,7 @@ class Main_Window(Gtk.ApplicationWindow):
             ).format(num=len(self.punkte))
         )
         if len(self.punkte) < 3:
-            self.displayMessage(self.success, _("Mindestens drei Punkte!"))
+            self.displayMessage(self.warning, _("Mindestens drei Punkte!"))
         elif len(self.punkte) >= 3:
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
@@ -536,8 +580,17 @@ class Main_Window(Gtk.ApplicationWindow):
             ).format(num=len(self.punkte))
         )
         if len(self.punkte) < 4:
-            self.displayMessage(self.success, _("Mindestens vier Punkte!"))
+            self.displayMessage(self.warning, _("Mindestens vier Punkte!"))
         elif len(self.punkte) >= 4:
+            self.berechneZeichne(pva, pha)
+            self.letzteFunktion(widget)
+
+    def zeichneExpoKurve(self, widget):
+        self.typ = 7
+        print ("Exponentialkurve ", len(self.punkte), "Punkte")
+        if len(self.punkte) < 3:
+            self.displayMessage(self.success, "Mindestens drei Punkte!")
+        elif len(self.punkte) >= 3:
             self.berechneZeichne(pva, pha)
             self.letzteFunktion(widget)
 
