@@ -26,6 +26,11 @@
         </screenshot>
     </screenshots>
     <releases>
+        <release version="0.3" date="2021-04-11">
+            <description>
+                <p>Add exponential function.</p>
+            </description>
+        </release>
         <release version="0.2.1" date="2021-03-29">
             <description>
                 <p>Add Portuguese and British English translations.</p>
