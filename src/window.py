@@ -136,13 +136,19 @@ class Main_Window(Gtk.ApplicationWindow):
             self.drawArea.queue_draw()
 
     def beiZoomEin(self, widget):
-        self.zoomFaktor = self.zoomFaktor/0.8
+        if self.zoomFaktor >= 5:
+            pass
+        else:
+            self.zoomFaktor = self.zoomFaktor/0.8
         self.zeichneneu    = True
         self.onDraw(self.drawArea, self.cr)
         self.drawArea.queue_draw()
 
     def beiZoomAus(self, widget):
-        self.zoomFaktor = self.zoomFaktor*0.8
+        if self.zoomFaktor <= 0.08:
+            pass
+        else:
+            self.zoomFaktor = self.zoomFaktor*0.8
         self.zeichneneu    = True
         self.onDraw(self.drawArea, self.cr)
         self.drawArea.queue_draw()
@@ -174,7 +180,6 @@ class Main_Window(Gtk.ApplicationWindow):
             self.aktHoehe  = ah
 
             self.zeichneneu    = True  # d.h. dass in onDraw die Zeichenfläche neu gezeichnet wird
-
 
         else:
             self.drawArea.set_size_request(self.aktBreite, self.aktHoehe)
@@ -485,7 +490,7 @@ class Main_Window(Gtk.ApplicationWindow):
             while x < sb/zf:
                 y = a*np.exp(b*0.01*x)+c  # Gleichung der Exponentialfunktion
                 punkt.append((zf*x+ pva, -y*zf + pha))
-                x += 5
+                x += 10
 
             self.zeichneFunktion(punkt)
 
@@ -500,9 +505,6 @@ class Main_Window(Gtk.ApplicationWindow):
 
 
     def zeichneFunktion(self,punkt):
-
-        #for p in punkt[1:]:
-
 
         self.cr.move_to(*punkt[0])
         for p in punkt[1:]:
